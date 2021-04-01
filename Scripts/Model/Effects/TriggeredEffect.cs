@@ -27,7 +27,7 @@ namespace CcgCore.Model.Effects
             return triggerConditions.TrueForAll(c => c.CheckConditions(e, thisScope));
         }
 
-        public void ActivateEffect(ParameterScope thisScope, CardEffectActivationContextBase context)
+        public void ActivateEffect(ParameterScope thisScope, CardEffectActivationContext context)
         {
             foreach (var e in effects)
             {

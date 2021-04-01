@@ -8,9 +8,9 @@ namespace CcgCore.View
     {
         [SerializeField] private TextMeshProUGUI cardNameText = null;
 
-        public CardBase Card { get; private set; }
+        public Card Card { get; private set; }
 
-        public virtual void Initialise(CardBase card)
+        public virtual void Initialise(Card card)
         {
             Card = card;
             UpdateDisplay();

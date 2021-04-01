@@ -6,7 +6,7 @@ namespace CcgCore.Model.Effects
     {
         [SerializeField] private int value = 1;
 
-        public override void ActivateEffects(CardEffectActivationContextBase context)
+        public override void ActivateEffects(CardEffectActivationContext context)
         {
             context.activatedCard.ChangeCounters(value);
         }

@@ -2,7 +2,7 @@
 {
     public abstract class CardEffect
     {
-        public abstract void ActivateEffects(CardEffectActivationContextBase context);
+        public abstract void ActivateEffects(CardEffectActivationContext context);
 
         protected virtual string DisplayName => GetType().Name;
     }

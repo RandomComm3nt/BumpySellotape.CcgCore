@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CcgCore.View.Special
 {
     public abstract class CompositeValueDisplay<TCard> : MonoBehaviour
-        where TCard : CardBase
+        where TCard : Card
     {
         private FieldRegion fieldRegion;
         [SerializeField] private TextMeshProUGUI valueField = null;

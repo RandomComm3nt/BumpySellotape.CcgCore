@@ -25,9 +25,9 @@ namespace CcgCore.Controller.Events
             }
         }
 
-        protected virtual CardEffectActivationContextBase CreateContextFromEvent(CardGameEvent cardGameEvent)
+        protected virtual CardEffectActivationContext CreateContextFromEvent(CardGameEvent cardGameEvent)
         {
-            return new CardEffectActivationContextBase()
+            return new CardEffectActivationContext()
             {
 
             };

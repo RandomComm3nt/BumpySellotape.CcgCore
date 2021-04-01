@@ -17,7 +17,7 @@ namespace CcgCore.Controller
             DiscardPile = new FieldRegion(cardGameController, this);
         }
 
-        public void DrawCard(CardBase card)
+        public void DrawCard(Card card)
         {
             MoveCardFromRegionToRegion(Deck, Hand, card);
         }
@@ -27,7 +27,7 @@ namespace CcgCore.Controller
             //MoveCardFromRegionToRegion(Deck, Hand, card);
         }
 
-        public void DiscardCard(CardBase card)
+        public void DiscardCard(Card card)
         {
             MoveCardFromRegionToRegion(Hand, DiscardPile, card);
         }
@@ -37,12 +37,12 @@ namespace CcgCore.Controller
             //MoveCardFromRegionToRegion(Deck, Hand, card);
         }
 
-        public void DiscardCardFromDeck(CardBase card)
+        public void DiscardCardFromDeck(Card card)
         {
             MoveCardFromRegionToRegion(Deck, DiscardPile, card);
         }
 
-        private void MoveCardFromRegionToRegion(FieldRegion sourceRegion, FieldRegion destinationRegion, CardBase card)
+        private void MoveCardFromRegionToRegion(FieldRegion sourceRegion, FieldRegion destinationRegion, Card card)
         {
 
         }

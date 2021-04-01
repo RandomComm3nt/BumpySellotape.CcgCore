@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 namespace CcgCore.Model
 {
-    public class CardEffectActivationContextBase
+    public class CardEffectActivationContext
     {
         public bool wasActionCancelled;
 
-        public List<CardBase> selectedCards;
+        public List<Card> selectedCards;
 
-        public CardBase activatedCard;
+        public Card activatedCard;
 
-        public CardBase targetCard;
+        public Card targetCard;
         public CardStack targetStack;
 
         public CardGameControllerBase cardGameController;

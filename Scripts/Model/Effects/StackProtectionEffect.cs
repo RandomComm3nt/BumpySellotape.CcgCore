@@ -1,9 +1,8 @@
-﻿using CcgCore.Model;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
-namespace Assets.Scripts.Model.Effects
+namespace CcgCore.Model.Effects
 {
     [Serializable]
     public class StackProtectionEffect

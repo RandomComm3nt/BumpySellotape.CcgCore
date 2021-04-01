@@ -2,7 +2,7 @@
 {
     public class CancelEventEffect : CardEffect
     {
-        public override void ActivateEffects(CardEffectActivationContextBase context)
+        public override void ActivateEffects(CardEffectActivationContext context)
         {
             context.wasActionCancelled = true;
         }

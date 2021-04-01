@@ -1,13 +1,11 @@
 ﻿using CcgCore.Controller.Cards;
-using CcgCore.Model;
-using CcgCore.Model.Effects;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Scripts.Model.Effects
+namespace CcgCore.Model.Effects
 {
     [Serializable]
     public class SelectCardFromStack : CardEffect
@@ -15,10 +13,10 @@ namespace Assets.Scripts.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayName")] private CardFilter cardFilter = null;
         [SerializeField, FoldoutGroup("@DisplayName")] private StackCardSelectionType stackCardSelectionType = StackCardSelectionType.Bottom;
 
-        public override void ActivateEffects(CardEffectActivationContextBase context)
+        public override void ActivateEffects(CardEffectActivationContext context)
         {
             var targets = GetValidTargets(context);
-            CardBase target = null;
+            Card target = null;
             switch (stackCardSelectionType)
             {
                 case StackCardSelectionType.Bottom:
@@ -35,26 +33,26 @@ namespace Assets.Scripts.Model.Effects
                     throw new NotImplementedException(); // TECH DEBT
             }
 
-            context.selectedCards = new List<CardBase>() { target };
+            context.selectedCards = new List<Card>() { target };
         }
 
-        private List<CardBase> GetValidTargets(CardEffectActivationContextBase context)
+        private List<Card> GetValidTargets(CardEffectActivationContext context)
         {
-            var unprotectedCards = new List<CardBase>();
+            var unprotectedCards = new List<Card>();
             bool stopAdding = true;
             for (int i = 0; i < context.targetStack.StackedCards.Count; i++)
             {
                 var spe = context.targetStack.StackedCards[i].CardDefinition.StackProtectionEffect;
                 if (!stopAdding)
                     unprotectedCards.Add(context.targetStack.StackedCards[i]);
-                if (spe.HasEffect && spe.ActionsToProtectFrom.TestCard<CardBase>(context.activatedCard))
+                if (spe.HasEffect && spe.ActionsToProtectFrom.TestCard<Card>(context.activatedCard))
                 {
                     switch (spe.Direction)
                     {
                         case StackProtectionEffect.ProtectionDirection.FullStack:
-                            return new List<CardBase>();
+                            return new List<Card>();
                         case StackProtectionEffect.ProtectionDirection.Below:
-                            unprotectedCards = new List<CardBase>() { context.targetStack.StackedCards[i] }; // cards below are protected
+                            unprotectedCards = new List<Card>() { context.targetStack.StackedCards[i] }; // cards below are protected
                             break;
                         case StackProtectionEffect.ProtectionDirection.Above:
                             stopAdding = true;
@@ -64,13 +62,13 @@ namespace Assets.Scripts.Model.Effects
             }
 
             var cardsToChooseFrom = unprotectedCards
-                .Where(c => cardFilter == null || cardFilter.TestCard<CardBase>(c))
+                .Where(c => cardFilter == null || cardFilter.TestCard<Card>(c))
                 .ToList();
             return cardsToChooseFrom;
         }
 
         // TECH DEBT - not yet run
-        public bool CanActivate(CardEffectActivationContextBase context)
+        public bool CanActivate(CardEffectActivationContext context)
         {
             return GetValidTargets(context).Count > 0;
         }

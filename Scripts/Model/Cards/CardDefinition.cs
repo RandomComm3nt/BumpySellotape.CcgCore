@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Model.Effects;
-using CcgCore.Model.Effects;
+﻿using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
 using CcgCore.Model.Special;
 using Sirenix.OdinInspector;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CcgCore.Model.Effects.Conditions
 {
-    public class CardCondition : Condition<CardBase>
+    public class CardCondition : Condition<Card>
     {
         [SerializeField] private bool checkCardCondition = false;
         [SerializeField, ShowIf("checkCardCondition")] private List<CardDefinition> cardDefinitions = new List<CardDefinition>();
@@ -16,7 +16,7 @@ namespace CcgCore.Model.Effects.Conditions
         private ComparisonOperator counterOperator = ComparisonOperator.Equals;
         [SerializeField, ShowIf("checkCounters")] private int counterValue = 0;
 
-        protected override bool CheckConditionInternal(CardBase card)
+        protected override bool CheckConditionInternal(Card card)
         {
             return
                 (!checkCardCondition || cardDefinitions.Contains(card.CardDefinitionBase)) &&

@@ -21,16 +21,16 @@ namespace CcgCore.Controller.Cards
 
         public void AddCard(CardDefinition cardDefinition)
         {
-            var card  = CardFactory.cardFactory.CreateCard<CardBase>(cardDefinition, null);
+            var card = CardFactory.cardFactory.CreateCard(cardDefinition, null);
             AddCardToNewStack(card);
         }
 
-        public void AddCard(CardBase card)
+        public void AddCard(Card card)
         {
             AddCardToNewStack(card);
         }
 
-        private void AddCardToNewStack(CardBase card)
+        private void AddCardToNewStack(Card card)
         {
             var stack = new CardStack(this);
             cardStacks.Add(stack);
@@ -48,7 +48,7 @@ namespace CcgCore.Controller.Cards
             OnCardAdded?.Invoke();
         }
 
-        public void RemoveCard(CardBase card)
+        public void RemoveCard(Card card)
         {
 
         }
@@ -59,7 +59,7 @@ namespace CcgCore.Controller.Cards
                 .ToList();
         }
 
-        public List<CardBase> FindCards(bool searchInStacks = false, CardDefinition cardDefinition = null)
+        public List<Card> FindCards(bool searchInStacks = false, CardDefinition cardDefinition = null)
         {
             return cardStacks
                 .SelectMany(s => searchInStacks ? s.StackedCards : s.StackedCards.Take(1))
