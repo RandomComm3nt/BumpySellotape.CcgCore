@@ -19,9 +19,7 @@ namespace CcgCore.Model.Special
             return thresholdInt + (backingParameter != null ? backingParameter.Evaluate(scope) : 0);
         }
 
-        public bool TestAboveThreshold<TCard, TCardDefinition>(FieldRegion<TCard, TCardDefinition> fieldRegion, ParameterScope scope, CompositeValueThreshold modifier = null)
-            where TCard : CardBase<TCardDefinition>
-            where TCardDefinition : CardDefinitionBase
+        public bool TestAboveThreshold(FieldRegion fieldRegion, ParameterScope scope, CompositeValueThreshold modifier = null)
         {
             return CompositeValue.GetValue(fieldRegion) >= GetThresholdValue(scope) + (modifier?.GetThresholdValue(scope) ?? 0);
         }

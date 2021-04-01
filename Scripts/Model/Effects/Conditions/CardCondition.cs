@@ -1,4 +1,5 @@
 ﻿using CcgCore.Controller.Cards;
+using CcgCore.Model.Cards;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace CcgCore.Model.Effects.Conditions
     public class CardCondition : Condition<CardBase>
     {
         [SerializeField] private bool checkCardCondition = false;
-        [SerializeField, ShowIf("checkCardCondition")] private List<CardDefinitionBase> cardDefinitions = new List<CardDefinitionBase>();
+        [SerializeField, ShowIf("checkCardCondition")] private List<CardDefinition> cardDefinitions = new List<CardDefinition>();
 
         [SerializeField] private bool checkCounters = false;
         [SerializeField, ShowIf("checkCounters")]

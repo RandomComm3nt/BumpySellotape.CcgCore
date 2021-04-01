@@ -1,10 +1,8 @@
-﻿using CcgCore.Controller.Cards;
-
-namespace CcgCore.Model.Effects
+﻿namespace CcgCore.Model.Effects
 {
     public abstract class CardEffect
     {
-        public abstract void ActivateEffects(CardEffectActivationContextBase context, CardBase thisCard);
+        public abstract void ActivateEffects(CardEffectActivationContextBase context);
 
         protected virtual string DisplayName => GetType().Name;
     }

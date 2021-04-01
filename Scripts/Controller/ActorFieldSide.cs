@@ -1,26 +1,23 @@
 ﻿using CcgCore.Controller.Cards;
-using CcgCore.Model;
 using CcgCore.Model.Parameters;
 
 namespace CcgCore.Controller
 {
-    public class ActorFieldSide<TCard, TCardDefinition> : ParameterScope
-        where TCard : CardBase<TCardDefinition>
-        where TCardDefinition : CardDefinitionBase
+    public class ActorFieldSide : ParameterScope
     {
-        public FieldRegion<TCard, TCardDefinition> Deck { get; }
-        public FieldRegion<TCard, TCardDefinition> Hand { get; }
-        public FieldRegion<TCard, TCardDefinition> DiscardPile { get; }
+        public FieldRegion Deck { get; }
+        public FieldRegion Hand { get; }
+        public FieldRegion DiscardPile { get; }
 
         public ActorFieldSide(CardGameControllerBase cardGameController, ParameterScope parentScope = null)
             : base(ParameterScopeLevel.Actor, parentScope ?? cardGameController)
         {
-            Deck = new FieldRegion<TCard, TCardDefinition>(cardGameController, this);
-            Hand = new FieldRegion<TCard, TCardDefinition>(cardGameController, this);
-            DiscardPile = new FieldRegion<TCard, TCardDefinition>(cardGameController, this);
+            Deck = new FieldRegion(cardGameController, this);
+            Hand = new FieldRegion(cardGameController, this);
+            DiscardPile = new FieldRegion(cardGameController, this);
         }
 
-        public void DrawCard(TCard card)
+        public void DrawCard(CardBase card)
         {
             MoveCardFromRegionToRegion(Deck, Hand, card);
         }
@@ -30,7 +27,7 @@ namespace CcgCore.Controller
             //MoveCardFromRegionToRegion(Deck, Hand, card);
         }
 
-        public void DiscardCard(TCard card)
+        public void DiscardCard(CardBase card)
         {
             MoveCardFromRegionToRegion(Hand, DiscardPile, card);
         }
@@ -40,12 +37,12 @@ namespace CcgCore.Controller
             //MoveCardFromRegionToRegion(Deck, Hand, card);
         }
 
-        public void DiscardCardFromDeck(TCard card)
+        public void DiscardCardFromDeck(CardBase card)
         {
             MoveCardFromRegionToRegion(Deck, DiscardPile, card);
         }
 
-        private void MoveCardFromRegionToRegion(FieldRegion<TCard, TCardDefinition> sourceRegion, FieldRegion<TCard, TCardDefinition> destinationRegion, TCard card)
+        private void MoveCardFromRegionToRegion(FieldRegion sourceRegion, FieldRegion destinationRegion, CardBase card)
         {
 
         }

@@ -1,5 +1,4 @@
-﻿using CcgCore.Controller.Cards;
-using CcgCore.Controller.Events;
+﻿using CcgCore.Controller.Events;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
@@ -32,7 +31,7 @@ namespace CcgCore.Model.Effects
         {
             foreach (var e in effects)
             {
-                e.ActivateEffects(context, thisScope as CardBase);
+                e.ActivateEffects(context);
             }
         }
 

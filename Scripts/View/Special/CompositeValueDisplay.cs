@@ -1,20 +1,18 @@
 ﻿using CcgCore.Controller.Cards;
-using CcgCore.Model;
 using CcgCore.Model.Special;
 using TMPro;
 using UnityEngine;
 
 namespace CcgCore.View.Special
 {
-    public abstract class CompositeValueDisplay<TCard, TCardDefinition> : MonoBehaviour
-        where TCard : CardBase<TCardDefinition>
-        where TCardDefinition : CardDefinitionBase
+    public abstract class CompositeValueDisplay<TCard> : MonoBehaviour
+        where TCard : CardBase
     {
-        private FieldRegion<TCard, TCardDefinition> fieldRegion;
+        private FieldRegion fieldRegion;
         [SerializeField] private TextMeshProUGUI valueField = null;
         [SerializeField] private CompositeValue compositeValue = null;
 
-        public void Initialise(FieldRegion<TCard, TCardDefinition> region)
+        public void Initialise(FieldRegion region)
         {
             fieldRegion = region;
             fieldRegion.OnCardAdded += UpdateDisplay; // TECH DEBT - should this be a generic on change?

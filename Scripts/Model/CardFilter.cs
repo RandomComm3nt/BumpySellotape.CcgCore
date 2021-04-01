@@ -14,9 +14,8 @@ namespace CcgCore.Model
         [SerializeField] private List<int> tags = null;
         [SerializeField, ShowIf("@tags.Count > 1")] private bool requireAllTags = false;
 
-        public bool TestCard<TCard, TCardDefinition>(TCard card)
-            where TCardDefinition : CardDefinitionBase
-            where TCard : CardBase<TCardDefinition>
+        public bool TestCard<TCard>(TCard card)
+            where TCard : CardBase
         {
             return tags.Count == 0 || (requireAllTags ? tags.All(t => card.CardDefinition.Tags.Contains(t)) : tags.Any(t => card.CardDefinition.Tags.Contains(t)));
         }

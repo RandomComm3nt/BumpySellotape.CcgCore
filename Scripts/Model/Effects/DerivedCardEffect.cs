@@ -7,10 +7,10 @@ namespace CcgCore.Model.Effects
         where TContext : CardEffectActivationContextBase
         where TCard : CardBase
     {
-        public override void ActivateEffects(CardEffectActivationContextBase context, CardBase thisCard)
+        public override void ActivateEffects(CardEffectActivationContextBase context)
         {
             if (context is TContext t)
-                ActivateEffects(t, thisCard as TCard);
+                ActivateEffects(t, context.activatedCard as TCard);
             else
                 throw new Exception($"DerivedCardEffect expected a context of type {typeof(TContext).Name} but received type {context.GetType().Name}");
         }

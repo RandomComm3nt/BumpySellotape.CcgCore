@@ -1,5 +1,6 @@
 ﻿using CcgCore.Controller.Events;
 using CcgCore.Model;
+using CcgCore.Model.Cards;
 using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
 using System.Collections.Generic;
@@ -8,17 +9,13 @@ using UnityEngine;
 
 namespace CcgCore.Controller.Cards
 {
-    public abstract class CardBase : ParameterScope
+    public class CardBase : ParameterScope
     {
         public delegate void CardChanged();
         public event CardChanged OnCardChanged;
 
-        public abstract CardDefinitionBase CardDefinitionBase { get; }
+        public CardDefinition CardDefinitionBase => CardDefinition;
         public int Counters { get; private set; }
-
-        public CardBase(ParameterScope parent)
-            : base(ParameterScopeLevel.Card, parent)
-        { }
 
         public void ChangeCounters(int delta)
         {
@@ -34,18 +31,35 @@ namespace CcgCore.Controller.Cards
                 .Select(e => ((ParameterScope)this, e))
                 .ToList();
         }
-    }
 
-    public class CardBase<T> : CardBase
-        where T : CardDefinitionBase
-    {
-        public T CardDefinition { get; private set; }
-        override public CardDefinitionBase CardDefinitionBase => CardDefinition;
 
-        public CardBase(T cardDefinition, ParameterScope parent)
-            : base(parent)
+        public CardDefinition CardDefinition { get; private set; }
+
+        public CardBase(CardDefinition cardDefinition, ParameterScope parent)
+            : base(ParameterScopeLevel.Card, parent)
         {
             CardDefinition = cardDefinition;
+        }
+
+
+
+        public string GetDescription()
+        {
+            var description = "";
+
+            //GetCommonEffects().ForEach(ce => description += ce.Label);
+
+            return description;
+        }
+
+        public virtual void AttemptPlayCard(CardStack targetStack)
+        {
+            
+        }
+
+        public virtual void PlayCard(CardEffectActivationContextBase context)
+        {
+
         }
     }
 }

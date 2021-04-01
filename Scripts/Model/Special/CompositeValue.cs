@@ -1,4 +1,5 @@
 ﻿using CcgCore.Controller.Cards;
+using CcgCore.Model.Cards;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
@@ -15,15 +16,13 @@ namespace CcgCore.Model.Special
         [Serializable]
         private class Factor
         {
-            public CardDefinitionBase cardDefinition = null;
+            public CardDefinition cardDefinition = null;
             public bool useCounters = false;
             [InlineEditor] public FloatParameter weighting = null;
 
-            public float GetValue<TCard, TCardDefinition>(FieldRegion<TCard, TCardDefinition> fieldRegion)
-                where TCard : CardBase<TCardDefinition>
-                where TCardDefinition : CardDefinitionBase
+            public float GetValue(FieldRegion fieldRegion)
             {
-                var cards = fieldRegion.FindCards(cardDefinition: cardDefinition as TCardDefinition);
+                var cards = fieldRegion.FindCards(cardDefinition: cardDefinition);
                 var weight = weighting.Evaluate(fieldRegion);
                 return (useCounters ? cards.Sum(c => c.Counters) : cards.Count) * weight;
             }
@@ -31,9 +30,7 @@ namespace CcgCore.Model.Special
 
         [SerializeField, ListDrawerSettings(CustomAddFunction = "AddFactor")] private List<Factor> factors = new List<Factor>();
 
-        public float GetValue<TCard, TCardDefinition>(FieldRegion<TCard, TCardDefinition> fieldRegion)
-            where TCard : CardBase<TCardDefinition>
-            where TCardDefinition : CardDefinitionBase
+        public float GetValue(FieldRegion fieldRegion)
         {
             return factors.Sum(f => f.GetValue(fieldRegion));
         }

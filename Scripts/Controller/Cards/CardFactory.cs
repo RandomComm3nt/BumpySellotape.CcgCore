@@ -1,4 +1,4 @@
-﻿using CcgCore.Model;
+﻿using CcgCore.Model.Cards;
 using CcgCore.Model.Parameters;
 using System;
 
@@ -9,9 +9,8 @@ namespace CcgCore.Controller.Cards
     {
         public static CardFactory cardFactory; // TECH DEBT - public access
 
-        public abstract TCard CreateCard<TCard, TCardDefinition>(TCardDefinition cardDefinition, ParameterScope parent)
-            where TCard : CardBase<TCardDefinition>
-            where TCardDefinition : CardDefinitionBase;
+        public abstract TCard CreateCard<TCard>(CardDefinition cardDefinition, ParameterScope parent)
+            where TCard : CardBase;
 
         public CardFactory()
         {
@@ -19,20 +18,19 @@ namespace CcgCore.Controller.Cards
         }
     }
 
-    public abstract class DerivedCardFactory<TCard, TCardDefinition> : CardFactory
-        where TCard : CardBase<TCardDefinition>
-        where TCardDefinition : CardDefinitionBase
+    public abstract class DerivedCardFactory<TCard> : CardFactory
+        where TCard : CardBase
     {
-        public sealed override TCard2 CreateCard<TCard2, TCardDefinition2>(TCardDefinition2 cardDefinition, ParameterScope parent)
+        public sealed override TCard2 CreateCard<TCard2>(CardDefinition cardDefinition, ParameterScope parent)
         {
-            if (!(cardDefinition is TCardDefinition2))
+            if (!(cardDefinition is CardDefinition))
                 throw new Exception("Input cardDefinition is not the correct type");
-            var card = CreateCard(cardDefinition as TCardDefinition, parent);
+            var card = CreateCard(cardDefinition as CardDefinition, parent);
             if (!(card is TCard2))
                 throw new Exception("Created card is not the correct type");
             return card as TCard2;
         }
 
-        protected abstract TCard CreateCard(TCardDefinition cardDefinition, ParameterScope parent);
+        protected abstract TCard CreateCard(CardDefinition cardDefinition, ParameterScope parent);
     }
 }

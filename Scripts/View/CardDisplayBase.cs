@@ -1,19 +1,16 @@
 ﻿using CcgCore.Controller.Cards;
-using CcgCore.Model;
 using TMPro;
 using UnityEngine;
 
 namespace CcgCore.View
 {
-    public class CardDisplayBase<TCard, TCardDefinition> : MonoBehaviour 
-        where TCardDefinition : CardDefinitionBase
-        where TCard : CardBase<TCardDefinition>
+    public class CardDisplayBase : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI cardNameText = null;
 
-        public TCard Card { get; private set; }
+        public CardBase Card { get; private set; }
 
-        public virtual void Initialise(TCard card)
+        public virtual void Initialise(CardBase card)
         {
             Card = card;
             UpdateDisplay();
@@ -21,7 +18,7 @@ namespace CcgCore.View
 
         protected virtual void UpdateDisplay()
         {
-            cardNameText.text = Card.CardDefinition.name;
+            cardNameText.text = Card.CardDefinitionBase.name;
         }
     }
 }

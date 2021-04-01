@@ -1,6 +1,4 @@
-﻿using CcgCore.Controller.Cards;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CcgCore.Model.Effects
 {
@@ -8,9 +6,9 @@ namespace CcgCore.Model.Effects
     {
         [SerializeField] private int value = 1;
 
-        public override void ActivateEffects(CardEffectActivationContextBase context, CardBase cardBase)
+        public override void ActivateEffects(CardEffectActivationContextBase context)
         {
-            cardBase.ChangeCounters(value);
+            context.activatedCard.ChangeCounters(value);
         }
     }
 }
