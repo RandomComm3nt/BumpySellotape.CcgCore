@@ -6,7 +6,6 @@ using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace CcgCore.Controller.Cards
 {
@@ -25,10 +24,18 @@ namespace CcgCore.Controller.Cards
             CardDefinition = cardDefinition;
         }
 
+        public void Remove()
+        {
+            (GetHigherScope(ParameterScopeLevel.Region) as FieldRegion).RemoveCard(this);
+        }
+
         public void ChangeCounters(int delta)
         {
             Counters += delta;
-            Debug.Log("counters changed, new total = " + Counters);
+            if (delta > 0)
+                RaiseEvent(new CardGameEvent(EventType.CountersAddedToCard));
+            else if (delta < 0)
+                RaiseEvent(new CardGameEvent(EventType.CountersRemovedFromCard));
             OnCardChanged?.Invoke();
         }
         

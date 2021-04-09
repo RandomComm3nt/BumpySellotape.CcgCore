@@ -9,5 +9,7 @@
         CardAddedToRegion = 11,
         TurnStart = 20,
         TurnEnd = 21,
+        CountersAddedToCard = 30,
+        CountersRemovedFromCard = 31,
     }
 }

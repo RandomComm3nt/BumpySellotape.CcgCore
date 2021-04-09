@@ -16,9 +16,9 @@ namespace CcgCore.Model.Effects.Conditions
         [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCardTags"), ValueDropdown("@CcgCore.Controller.CardGameEditor.CardGameConfig.CardTags")] private List<int> tags = new List<int>();
 
         [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCounters = false;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCounters")]
+        [SerializeField, HorizontalGroup("@DisplayLabel/Counters"), ShowIf("checkCounters"), LabelText("Counters")]
         private ComparisonOperator counterOperator = ComparisonOperator.Equals;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCounters")] private int counterValue = 0;
+        [SerializeField, HorizontalGroup("@DisplayLabel/Counters"), ShowIf("checkCounters"), HideLabel] private int counterValue = 0;
 
         protected override bool CheckConditionInternal(Card card)
         {
@@ -30,7 +30,7 @@ namespace CcgCore.Model.Effects.Conditions
         }
 
 #if UNITY_EDITOR
-        public string DisplayName
+        public override string DisplayLabel
         {
             get
             {
@@ -38,7 +38,9 @@ namespace CcgCore.Model.Effects.Conditions
                     return cardDefinitions[0].name;
                 if (checkCardTags && tags.Count == 1)
                     return "[" + CardGameEditor.CardGameConfig.GetTagName(tags[0]) + "]";
-                return "";
+                if (checkCounters)
+                    return $"Counters {counterOperator} {counterValue}";
+                return "[Empty Condition]";
             }
         }
     }

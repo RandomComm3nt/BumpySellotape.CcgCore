@@ -8,10 +8,19 @@ namespace CcgCore.Model.Effects
 {
     public class RemoveCardsEffect : TargetedCardEffect
     {
-        [SerializeField, HideLabel, HideReferenceObjectPicker, FoldoutGroup("@DisplayLabel")] private CardCondition cardCondition = new CardCondition();
+        [SerializeField, FoldoutGroup("@DisplayLabel"), PropertyOrder(-1)] private bool useSelectedCards;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), HideIf("HideTargettingFields"), HideLabel, HideReferenceObjectPicker] private CardCondition cardCondition = new CardCondition();
         //TODO features for first/all/random/choose
+
+        protected override bool HideTargettingFields => useSelectedCards;
+
         public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
         {
+            if (useSelectedCards)
+            {
+                context.selectedCards.ForEach(c => c.Remove());
+                return;
+            }
             var targets = GetTargetActors(context, thisCard);
             foreach (var actor in targets)
             {
@@ -20,11 +29,20 @@ namespace CcgCore.Model.Effects
                 {
                     var card = scope as Card;
                     if (cardCondition.CheckCondition(card))
-                        (card.GetHigherScope(Parameters.ParameterScopeLevel.Region) as FieldRegion).RemoveCard(card);
+                        card.Remove();
                 }
             }
         }
 
-        public override string DisplayLabel => /*cards.Count == 1 && cards[0] ? $"Add card {cards[0].name} to {TargetString}" : */ $"Remove cards from {TargetString}";
+        public override string DisplayLabel
+        {
+            get
+            {
+                if (useSelectedCards)
+                    return "Remove selected cards";
+                /*cards.Count == 1 && cards[0] ? $"Add card {cards[0].name} to {TargetString}" : */
+                return $"Remove cards from {TargetString}";
+            }
+        }
     }
 }

@@ -10,10 +10,11 @@ namespace CcgCore.Model.Effects
 {
     public abstract class TargetedCardEffect : CardEffect
     {
-        [SerializeField, FoldoutGroup("@DisplayLabel"), HorizontalGroup("@DisplayLabel/ActorSelection"), LabelText("Actor"), LabelWidth(70)] protected ActorFilter actorFilter;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), HorizontalGroup("@DisplayLabel/ActorSelection"), HideLabel] protected ActorSelector actorSelector;
+        [SerializeField, HorizontalGroup("@DisplayLabel/ActorSelection"), HideIf("HideTargettingFields"), LabelText("Actor"), LabelWidth(70)] protected ActorFilter actorFilter;
+        [SerializeField, HorizontalGroup("@DisplayLabel/ActorSelection"), HideIf("HideTargettingFields"), HideLabel] protected ActorSelector actorSelector;
 
         protected string TargetString => $"{actorFilter} {actorSelector}";
+        protected virtual bool HideTargettingFields => false; 
 
         protected List<Actor> GetTargetActors(CardEffectActivationContext context, Card thisCard)
         {

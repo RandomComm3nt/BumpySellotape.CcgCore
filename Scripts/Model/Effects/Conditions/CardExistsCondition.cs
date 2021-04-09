@@ -24,7 +24,7 @@ namespace CcgCore.Model.Effects.Conditions
             get
             {
                 var name = invertCondition ? "Card Doesn't Exist In Scope" : "Card Exists In Scope";
-                var conditionName = cardCondition.DisplayName;
+                var conditionName = cardCondition.DisplayLabel;
                 if (!string.IsNullOrEmpty(conditionName))
                     name += " - " + conditionName;
                 return name;
