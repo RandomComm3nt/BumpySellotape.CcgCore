@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace CcgCore.Model.Parameters
 {
+    // TECH DEBT - duplicated functionality with Stats, which are a more expressive system
     public abstract class Parameter<T> : ScriptableObject
     {
         [SerializeField] private ParameterScopeLevel scopeLevel = ParameterScopeLevel.Global;

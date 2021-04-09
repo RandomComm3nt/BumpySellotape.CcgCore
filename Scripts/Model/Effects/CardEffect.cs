@@ -4,6 +4,6 @@
     {
         public abstract void ActivateEffects(CardEffectActivationContext context);
 
-        protected virtual string DisplayName => GetType().Name;
+        public virtual string DisplayLabel => GetType().Name;
     }
 }

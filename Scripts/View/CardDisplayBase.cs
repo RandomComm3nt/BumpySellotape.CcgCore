@@ -18,7 +18,7 @@ namespace CcgCore.View
 
         protected virtual void UpdateDisplay()
         {
-            cardNameText.text = Card.CardDefinitionBase.name;
+            cardNameText.text = Card.CardDefinition.name;
         }
     }
 }

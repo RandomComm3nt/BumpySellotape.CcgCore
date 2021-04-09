@@ -8,10 +8,10 @@ namespace CcgCore.Controller.Events
     {
         public void RaiseEvent(CardGameEvent cardGameEvent, ParameterScope topLevelScope)
         {
-            Debug.Log("Processing event: " + cardGameEvent);
+            //Debug.Log("Processing event: " + cardGameEvent);
             var effects = topLevelScope.GetAllTriggeredEffectsForEvent(cardGameEvent);
             var context = CreateContextFromEvent(cardGameEvent);
-            Debug.Log($"{effects.Count} effects triggered");
+            //Debug.Log($"{effects.Count} effects triggered");
 
             for (int i = 0; i < effects.Count; i++)
             {

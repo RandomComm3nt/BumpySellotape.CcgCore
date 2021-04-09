@@ -1,4 +1,7 @@
-﻿using CcgCore.Model;
+﻿using CcgCore.Model.Cards;
+using CcgCore.Model.Config;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 
 namespace CcgCore.Controller
@@ -19,7 +22,18 @@ namespace CcgCore.Controller
                 }
                 return cardGameConfig;
             }
+            set
+            {
+                cardGameConfig = value;
+            }
         }
+
+        public static List<CardDefinition> GetAllCards => AssetDatabase
+            .FindAssets($"t:{typeof(CardDefinition).Name}")
+            .Select(s => AssetDatabase.GUIDToAssetPath(s))
+            .Where(s => s.Contains(CardGameConfig.CardPathFilter))
+            .Select(s => AssetDatabase.LoadAssetAtPath<CardDefinition>(s))
+            .ToList();
     }
 #endif
 }

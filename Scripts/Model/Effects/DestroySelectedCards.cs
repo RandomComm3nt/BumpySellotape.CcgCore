@@ -14,7 +14,7 @@ namespace CcgCore.Model.Effects
         {
             if (destroyCopies)
             {
-                var cardsToDestroy = context.selectedCards.Select(s => s.CardDefinitionBase).ToList();
+                var cardsToDestroy = context.selectedCards.Select(s => s.CardDefinition).ToList();
                 if (scope == Scope.TargetStack)
                 {
                     foreach (var c in context.targetStack.StackedCards.Where(tc => cardsToDestroy.Contains(tc.CardDefinition)))

@@ -6,6 +6,8 @@ namespace CcgCore.Model.Effects.Conditions
     public abstract class Condition
     {
         public abstract bool CheckCondition(ParameterScope scope);
+
+        public virtual string DisplayLabel => "[Condition]";
     }
 
     public abstract class Condition<TScope> : Condition

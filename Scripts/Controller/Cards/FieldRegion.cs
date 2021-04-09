@@ -12,16 +12,18 @@ namespace CcgCore.Controller.Cards
         public event RegionChange OnCardAdded;
 
         private readonly List<CardStack> cardStacks;
+        private readonly CardGameControllerBase cardGameController;
 
         public FieldRegion(CardGameControllerBase cardGameController, ParameterScope parentScope = null)
             : base(ParameterScopeLevel.Region, parentScope ?? cardGameController)
         {
             cardStacks = new List<CardStack>();
+            this.cardGameController = cardGameController;
         }
 
         public void AddCard(CardDefinition cardDefinition)
         {
-            var card = CardFactory.cardFactory.CreateCard(cardDefinition, null);
+            var card = cardGameController.CardFactory.CreateCard(cardDefinition, null);
             AddCardToNewStack(card);
         }
 
@@ -50,7 +52,16 @@ namespace CcgCore.Controller.Cards
 
         public void RemoveCard(Card card)
         {
+            if (ChildScopes.Contains(card))
+                RemoveChild(card);
+            else if (cardStacks.Any(cs => cs.BaseCard == card))
+            {
+                CardStack scope = cardStacks.First(cs => cs.BaseCard == card);
+                RemoveChild(scope);
+                cardStacks.Remove(scope);
+            }
 
+            OnCardAdded?.Invoke();
         }
 
         public List<CardStack> FindCardStacks()

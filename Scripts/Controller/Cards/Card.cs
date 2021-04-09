@@ -14,26 +14,8 @@ namespace CcgCore.Controller.Cards
         public delegate void CardChanged();
         public event CardChanged OnCardChanged;
 
-        public CardDefinition CardDefinitionBase => CardDefinition;
-        public int Counters { get; private set; }
-
-        public void ChangeCounters(int delta)
-        {
-            Counters += delta;
-            Debug.Log("counters changed, new total = " + Counters);
-            OnCardChanged?.Invoke();
-        }
-
-        protected override List<(ParameterScope scope, TriggeredEffect effect)> GetTriggeredEffectsForEvent(CardGameEvent cardGameEvent)
-        {
-            return CardDefinitionBase.TriggeredEffects
-                .Where(e => e.CheckConditions(cardGameEvent, this))
-                .Select(e => ((ParameterScope)this, e))
-                .ToList();
-        }
-
-
         public CardDefinition CardDefinition { get; private set; }
+        public int Counters { get; private set; }
 
         internal Card(CardDefinition cardDefinition, ParameterScope parent)
             : base(ParameterScopeLevel.Card, parent)
@@ -41,8 +23,24 @@ namespace CcgCore.Controller.Cards
             CardDefinition = cardDefinition;
         }
 
-
-
+        public void ChangeCounters(int delta)
+        {
+            Counters += delta;
+            Debug.Log("counters changed, new total = " + Counters);
+            OnCardChanged?.Invoke();
+        }
+        
+        protected override List<(ParameterScope scope, TriggeredEffect effect)> GetTriggeredEffectsForEvent(CardGameEvent cardGameEvent)
+        {
+            var m = CardDefinition.GetModule<CardPassiveEffects>();
+            if (m == null)
+                return new List<(ParameterScope scope, TriggeredEffect effect)>();
+            return m.TriggeredEffects
+                .Where(e => e.CheckConditions(cardGameEvent, this, CardDefinition.DebugCard ? CardDefinition.name : null))
+                .Select(e => ((ParameterScope)this, e))
+                .ToList();
+        }
+        
         public string GetDescription()
         {
             var description = "";
@@ -53,9 +51,9 @@ namespace CcgCore.Controller.Cards
         }
 
         public void AttemptPlayCard(CardStack targetStack)
-        {/*
-            Debug.Log("Attempt to play card");
+        {
             bool success = true;
+            /*
             foreach (var threshold in CardDefinition.GetModule<MindHackModule>().SuccessThresholds)
             {
                 var modifier = targetStack.BaseCard.CardDefinition.ThresholdModifiers.FirstOrDefault(m => m.CompositeValue == threshold.CompositeValue);
@@ -66,11 +64,12 @@ namespace CcgCore.Controller.Cards
                     break;
                 }
             }
+            */
 
             var context = new CardEffectActivationContext()
             {
                 targetStack = targetStack,
-                cardGameController = CardGameController.cardGameController,
+                cardGameController = RootScope as CardGameControllerBase,
                 activatedCard = this,
             };
 
@@ -82,23 +81,30 @@ namespace CcgCore.Controller.Cards
             {
                 FailToPlayCard(context);
             }
-            */
         }
 
         public void PlayCard(CardEffectActivationContext context)
         {
-            /*
-            Debug.Log("Play card");
-            // TECH DEBT
-            if (CardDefinition.GetModule<MindHackModule>().OneOffAction)
+            // TECH DEBT - wrong event
+            var cardEvent = new CardEvent(CardEvent.CardEventType.CardAdded);
+            RaiseEvent(cardEvent);
+            if (cardEvent.IsCancelled)
+                return;
+
+            var activationEffects = CardDefinition.GetModule<CardActivationEffects>();
+            if (activationEffects == null)
+                return;
+
+            activationEffects.ActivationEffects.ForEach(e =>
             {
-                CardDefinition.ActivationEffects.ForEach(e =>
-                {
-                    if (!context.wasActionCancelled)
-                        e.ActivateEffects(context);
-                });
+                if (!context.wasActionCancelled)
+                    e.ActivateEffects(context);
+            });
+
+            if (activationEffects.DestroyWhenPlayed)
+            {
+                ParentScope?.RemoveChild(this);
             }
-            */
         }
 
         public void FailToPlayCard(CardEffectActivationContext context)

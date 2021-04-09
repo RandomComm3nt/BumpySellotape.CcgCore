@@ -10,6 +10,7 @@ namespace CcgCore.Model.Parameters
         public ParameterScopeLevel ScopeLevel { get; }
         public ParameterScope ParentScope { get; private set; }
         public List<ParameterScope> ChildScopes { get; }
+        public ParameterScope RootScope => ParentScope == null ? this : ParentScope.RootScope;
 
         protected ParameterScope(ParameterScopeLevel scopeLevel, ParameterScope parentScope)
         {
@@ -63,6 +64,20 @@ namespace CcgCore.Model.Parameters
         {
             ChildScopes.Remove(scope);
             scope.ParentScope = null;
+        }
+
+        public List<ParameterScope> GetAllChildScopes()
+        {
+            return new List<ParameterScope>() { this }
+                .Union(ChildScopes.SelectMany(s => s.GetAllChildScopes()))
+                .ToList();
+        }
+
+        public List<ParameterScope> GetAllChildScopesAtLevel(ParameterScopeLevel scopeLevel)
+        {
+            return GetAllChildScopes()
+                .Where(s => s.ScopeLevel == scopeLevel)
+                .ToList();
         }
     }
 }

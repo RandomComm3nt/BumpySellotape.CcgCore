@@ -4,6 +4,7 @@ using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CcgCore.Model.Effects
@@ -12,27 +13,56 @@ namespace CcgCore.Model.Effects
     public class TriggerCondition
     {
         [SerializeField, HideInInspector] private bool restrictToLocalScope = false;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), HideLabel, HorizontalGroup("@DisplayLabel/Selection"), DisableIf("restrictToLocalScope")] private ScopeSelectionType scopeSelectionType;
+        [SerializeField, HideInInspector] private bool hasTrigger = true;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), HideLabel, HorizontalGroup("@DisplayLabel/Selection"), DisableIf("restrictToLocalScope"), ValueDropdown("GetPossibleScopeTypes")] private ScopeSelectionType scopeSelectionType;
         [SerializeField, FoldoutGroup("@DisplayLabel"), HideLabel, HorizontalGroup("@DisplayLabel/Selection")] private ParameterScopeLevel parameterScopeLevel;
-        [SerializeField, FoldoutGroup("@DisplayLabel")] private List<Condition> conditions = new List<Condition>();
+        [SerializeField, FoldoutGroup("@DisplayLabel"), HideReferenceObjectPicker] private List<Condition> conditions = new List<Condition>();
 
-        public bool CheckConditions(CardGameEvent e, ParameterScope thisScope)
+        public bool CheckConditions(CardGameEvent e, ParameterScope thisScope, string debugCardName = null)
         {
-            var targetScope = scopeSelectionType == ScopeSelectionType.This ? thisScope.GetHigherScope(parameterScopeLevel) : e.GetFromHeirachyAtLevel(parameterScopeLevel);
-            if (targetScope == null)
+            if (debugCardName != null)
+                Debug.Log($"{debugCardName} - testing trigger condition");
+            List<ParameterScope> targetScopes = new List<ParameterScope>();
+            switch (scopeSelectionType)
+            {
+                case ScopeSelectionType.This:
+                    targetScopes.Add(thisScope.GetHigherScope(parameterScopeLevel));
+                    break;
+                case ScopeSelectionType.Trigger:
+                    targetScopes.Add(e.GetFromHeirachyAtLevel(parameterScopeLevel));
+                    break;
+                case ScopeSelectionType.Any:
+                    targetScopes = thisScope.GetHigherScope(ParameterScopeLevel.Global).GetAllChildScopesAtLevel(parameterScopeLevel);
+                    break;
+                case ScopeSelectionType.NotThis:
+                    targetScopes = thisScope.RootScope.GetAllChildScopesAtLevel(parameterScopeLevel);
+                    targetScopes.Remove(thisScope.GetHigherScope(parameterScopeLevel));
+                    break;
+            }
+
+            if (targetScopes.Count == 0)
+            {
+                if (debugCardName != null)
+                    Debug.Log($"{debugCardName} - no target scopes found");
                 return false;
-            return conditions.TrueForAll(c => c.CheckCondition(targetScope));
+            }
+
+            if (debugCardName != null)
+                Debug.Log($"{debugCardName} - {targetScopes.Count} target scopes found");
+            return targetScopes.Any(ts => conditions.TrueForAll(c => c.CheckCondition(ts)));
         }
 
         public bool IsLocallyScoped => scopeSelectionType == ScopeSelectionType.This;
         public enum ScopeSelectionType
         {
             This = 0,
-            Trigger
+            Trigger,
+            NotThis,
+            Any,
         }
 
 #if UNITY_EDITOR
-        private string DisplayLabel => $"{scopeSelectionType} {parameterScopeLevel} - {conditions.Count} Conditions";
+        public string DisplayLabel => $"{scopeSelectionType} {parameterScopeLevel} - " + (conditions.Count == 1 ? conditions[0].DisplayLabel : $"{conditions.Count} Conditions");
 
         public void SetLocalScopeRestriction(bool restricted)
         {
@@ -41,6 +71,18 @@ namespace CcgCore.Model.Effects
             {
                 scopeSelectionType = ScopeSelectionType.This;
             }
+        }
+
+        public List<ScopeSelectionType> GetPossibleScopeTypes()
+        {
+            var list = new List<ScopeSelectionType>() { ScopeSelectionType.This };
+            if (restrictToLocalScope)
+                return list;
+            if (hasTrigger)
+                list.Add(ScopeSelectionType.Trigger);
+            list.Add(ScopeSelectionType.Any);
+            list.Add(ScopeSelectionType.NotThis);
+            return list;
         }
 #endif
     }

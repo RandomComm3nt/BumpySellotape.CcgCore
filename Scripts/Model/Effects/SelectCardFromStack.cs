@@ -10,8 +10,8 @@ namespace CcgCore.Model.Effects
     [Serializable]
     public class SelectCardFromStack : CardEffect
     {
-        [SerializeField, FoldoutGroup("@DisplayName")] private CardFilter cardFilter = null;
-        [SerializeField, FoldoutGroup("@DisplayName")] private StackCardSelectionType stackCardSelectionType = StackCardSelectionType.Bottom;
+        [SerializeField, FoldoutGroup("@DisplayLabel")] private CardFilter cardFilter = null;
+        [SerializeField, FoldoutGroup("@DisplayLabel")] private StackCardSelectionType stackCardSelectionType = StackCardSelectionType.Bottom;
 
         public override void ActivateEffects(CardEffectActivationContext context)
         {
@@ -42,9 +42,10 @@ namespace CcgCore.Model.Effects
             bool stopAdding = true;
             for (int i = 0; i < context.targetStack.StackedCards.Count; i++)
             {
-                var spe = context.targetStack.StackedCards[i].CardDefinition.StackProtectionEffect;
+                //var spe = context.targetStack.StackedCards[i].CardDefinition.StackProtectionEffect;
                 if (!stopAdding)
                     unprotectedCards.Add(context.targetStack.StackedCards[i]);
+                /*
                 if (spe.HasEffect && spe.ActionsToProtectFrom.TestCard<Card>(context.activatedCard))
                 {
                     switch (spe.Direction)
@@ -59,6 +60,7 @@ namespace CcgCore.Model.Effects
                             break;
                     }
                 }
+                */
             }
 
             var cardsToChooseFrom = unprotectedCards

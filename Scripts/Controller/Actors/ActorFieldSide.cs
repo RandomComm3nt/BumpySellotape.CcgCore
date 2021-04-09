@@ -1,16 +1,16 @@
 ﻿using CcgCore.Controller.Cards;
 using CcgCore.Model.Parameters;
 
-namespace CcgCore.Controller
+namespace CcgCore.Controller.Actors
 {
-    public class ActorFieldSide : ParameterScope
+    public class ActorFieldSide : ActorScope
     {
         public FieldRegion Deck { get; }
         public FieldRegion Hand { get; }
         public FieldRegion DiscardPile { get; }
 
         public ActorFieldSide(CardGameControllerBase cardGameController, ParameterScope parentScope = null)
-            : base(ParameterScopeLevel.Actor, parentScope ?? cardGameController)
+            : base(parentScope ?? cardGameController)
         {
             Deck = new FieldRegion(cardGameController, this);
             Hand = new FieldRegion(cardGameController, this);
