@@ -1,34 +1,53 @@
 ﻿using CcgCore.Controller.Actors;
+using CcgCore.Controller.Cards;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CcgCore.Model.Effects
 {
     public abstract class TargetedCardEffect : CardEffect
     {
-        [SerializeField, FoldoutGroup("@DisplayLabel")] protected ActivationEffectTargetType target = ActivationEffectTargetType.Activator;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), HorizontalGroup("@DisplayLabel/ActorSelection"), LabelText("Actor"), LabelWidth(70)] protected ActorFilter actorFilter;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), HorizontalGroup("@DisplayLabel/ActorSelection"), HideLabel] protected ActorSelector actorSelector;
 
-        protected List<Actor> GetTargetActors(CardEffectActivationContext context)
+        protected string TargetString => $"{actorFilter} {actorSelector}";
+
+        protected List<Actor> GetTargetActors(CardEffectActivationContext context, Card thisCard)
         {
             var ts = context.cardGameController.TurnSystem;
-            return target switch
+            var actor = actorSelector switch
             {
-                ActivationEffectTargetType.Activator => new List<Actor> { ts.CurrentTurnActor },
-                ActivationEffectTargetType.NextActor => new List<Actor> { ts.NextTurnActor },
+                ActorSelector.OwnerOfThisCard => thisCard.ActorScope,
+                ActorSelector.TriggerActor => context.triggerActor,
+                _ => throw new NotImplementedException(),
+            };
+            var theActor = new List<Actor> { actor.actor };
+
+            return actorFilter switch
+            {
+                ActorFilter.The => theActor,
+                ActorFilter.NotThe => ts.Actors.Except(theActor).Take(1).ToList(),
+                ActorFilter.All => ts.Actors,
+                ActorFilter.AllExceptThe => ts.Actors.Except(theActor).ToList(),
                 _ => throw new NotImplementedException(),
             };
         }
-    }
 
-    public enum ActivationEffectTargetType
-    {
-        Activator = 0,
-        NextActor,
-        AllActors,
-        AllActorsExceptCurrent,
-        RandomActor,
-        RandomActorExceptCurrent,
+        public enum ActorFilter
+        {
+            The,
+            NotThe,
+            All,
+            AllExceptThe,
+        }
+
+        public enum ActorSelector
+        {
+            OwnerOfThisCard,
+            TriggerActor,
+        }
     }
 }

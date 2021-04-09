@@ -16,6 +16,7 @@ namespace CcgCore.Controller.Actors
             this.turnSystem = turnSystem;
             turnSystem.AddActor(this);
             ActorScope = actorScope;
+            actorScope.actor = this;
             StatCollection = new StatCollection();
         }
 
@@ -27,6 +28,7 @@ namespace CcgCore.Controller.Actors
         {
             isTurn = true;
             cardsPlayedThisTurn = 0;
+            ActorScope.RaiseEvent(new Events.CardGameEvent(Events.EventType.TurnStart));
         }
 
         public abstract void DoTurn();
@@ -34,6 +36,7 @@ namespace CcgCore.Controller.Actors
         public void EndTurn()
         {
             isTurn = false;
+            ActorScope.RaiseEvent(new Events.CardGameEvent(Events.EventType.TurnEnd));
         }
 
         public void SetTemplate(ActorTemplate playerTemplate)

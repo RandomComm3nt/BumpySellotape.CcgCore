@@ -10,15 +10,15 @@ namespace CcgCore.Model.Effects.Conditions
 {
     public class CardCondition : Condition<Card>
     {
-        [SerializeField] private bool checkCard = false;
-        [SerializeField, ShowIf("checkCard"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cardDefinitions = new List<CardDefinition>();
-        [SerializeField] private bool checkCardTags = false;
-        [SerializeField, ShowIf("checkCardTags"), ValueDropdown("@CcgCore.Controller.CardGameEditor.CardGameConfig.CardTags")] private List<int> tags = new List<int>();
+        [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCard = false;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCard"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cardDefinitions = new List<CardDefinition>();
+        [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCardTags = false;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCardTags"), ValueDropdown("@CcgCore.Controller.CardGameEditor.CardGameConfig.CardTags")] private List<int> tags = new List<int>();
 
-        [SerializeField] private bool checkCounters = false;
-        [SerializeField, ShowIf("checkCounters")]
+        [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCounters = false;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCounters")]
         private ComparisonOperator counterOperator = ComparisonOperator.Equals;
-        [SerializeField, ShowIf("checkCounters")] private int counterValue = 0;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCounters")] private int counterValue = 0;
 
         protected override bool CheckConditionInternal(Card card)
         {

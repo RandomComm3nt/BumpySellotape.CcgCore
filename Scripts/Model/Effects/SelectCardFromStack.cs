@@ -13,7 +13,7 @@ namespace CcgCore.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayLabel")] private CardFilter cardFilter = null;
         [SerializeField, FoldoutGroup("@DisplayLabel")] private StackCardSelectionType stackCardSelectionType = StackCardSelectionType.Bottom;
 
-        public override void ActivateEffects(CardEffectActivationContext context)
+        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
         {
             var targets = GetValidTargets(context);
             Card target = null;

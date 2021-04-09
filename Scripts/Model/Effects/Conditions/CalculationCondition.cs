@@ -12,7 +12,7 @@ namespace CcgCore.Model.Effects.Conditions
 
         public bool CheckCondition()
         {
-            return true;
+            return UnityEngine.Random.Range(0f, randomFactor) > successThreshold;
         }
     }
 }

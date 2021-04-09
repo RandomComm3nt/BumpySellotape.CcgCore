@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using CcgCore.Controller.Cards;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace CcgCore.Model.Effects
@@ -7,7 +8,7 @@ namespace CcgCore.Model.Effects
     {
         [SerializeField, HideLabel, ReadOnly] private string cancel = "Cancel Event";
 
-        public override void ActivateEffects(CardEffectActivationContext context)
+        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
         {
             context.wasActionCancelled = true;
         }

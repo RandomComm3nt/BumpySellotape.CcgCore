@@ -12,9 +12,9 @@ namespace CcgCore.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayLabel")] private RegionSelectionType regionSelectionType;
         [SerializeField, FoldoutGroup("@DisplayLabel"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cards = new List<CardDefinition>();
 
-        public override void ActivateEffects(CardEffectActivationContext context)
+        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
         {
-            var targets = GetTargetActors(context);
+            var targets = GetTargetActors(context, thisCard);
             foreach (var actor in targets)
             {
                 var scopes = actor.ActorScope.GetAllChildScopesAtLevel(Parameters.ParameterScopeLevel.Region).Select(s => s as FieldRegion).ToList();
@@ -40,6 +40,6 @@ namespace CcgCore.Model.Effects
             ByTemplate,
         }
 
-        public override string DisplayLabel => cards.Count == 1 && cards[0] ? $"Add card {cards[0].name} to {target}" : $"Add Cards to {target}";
+        public override string DisplayLabel => cards.Count == 1 && cards[0] ? $"Add card {cards[0].name} to {TargetString}" : $"Add {cards.Count} cards to {TargetString}";
     }
 }

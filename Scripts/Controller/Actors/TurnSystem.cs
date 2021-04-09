@@ -6,6 +6,7 @@ namespace CcgCore.Controller.Actors
     {
         private readonly List<Actor> actors;
         private int turnIndex;
+        public List<Actor> Actors => actors;
         public Actor CurrentTurnActor => actors[turnIndex];
         public Actor NextTurnActor => actors[(turnIndex + 1) % actors.Count];
 

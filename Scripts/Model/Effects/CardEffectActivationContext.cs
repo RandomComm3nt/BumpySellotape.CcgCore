@@ -1,4 +1,5 @@
 ﻿using CcgCore.Controller;
+using CcgCore.Controller.Actors;
 using CcgCore.Controller.Cards;
 using System.Collections.Generic;
 
@@ -16,5 +17,7 @@ namespace CcgCore.Model
         public CardStack targetStack;
 
         public CardGameControllerBase cardGameController;
+
+        public ActorScope triggerActor;
     }
 }

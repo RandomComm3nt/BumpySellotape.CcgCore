@@ -1,4 +1,6 @@
-﻿using CcgCore.Model;
+﻿using CcgCore.Controller.Actors;
+using CcgCore.Controller.Cards;
+using CcgCore.Model;
 using CcgCore.Model.Parameters;
 using UnityEngine;
 
@@ -29,7 +31,9 @@ namespace CcgCore.Controller.Events
         {
             return new CardEffectActivationContext()
             {
-
+                activatedCard = cardGameEvent.callingHeirachy[0] as Card,
+                triggerActor = (cardGameEvent.GetFromHeirachyAtLevel(ParameterScopeLevel.Actor) as ActorScope),
+                cardGameController = cardGameEvent.GetFromHeirachyAtLevel(ParameterScopeLevel.Game) as CardGameControllerBase,
             };
         }
     }

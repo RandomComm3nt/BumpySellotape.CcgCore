@@ -1,4 +1,5 @@
-﻿using CcgCore.Controller.Events;
+﻿using CcgCore.Controller.Actors;
+using CcgCore.Controller.Events;
 using CcgCore.Model;
 using CcgCore.Model.Cards;
 using CcgCore.Model.Effects;
@@ -16,6 +17,7 @@ namespace CcgCore.Controller.Cards
 
         public CardDefinition CardDefinition { get; private set; }
         public int Counters { get; private set; }
+        public ActorScope ActorScope => (GetHigherScope(ParameterScopeLevel.Actor) as ActorScope);
 
         internal Card(CardDefinition cardDefinition, ParameterScope parent)
             : base(ParameterScopeLevel.Card, parent)
@@ -75,7 +77,12 @@ namespace CcgCore.Controller.Cards
 
             if (success)
             {
-                PlayCard(context);
+                var cardEvent = new CardGameEvent(Events.EventType.CardActivationAttempt);
+                RaiseEvent(cardEvent);
+                if (cardEvent.IsCancelled)
+                    FailToPlayCard(context);
+                else
+                    PlayCard(context);
             }
             else
             {
@@ -85,8 +92,7 @@ namespace CcgCore.Controller.Cards
 
         public void PlayCard(CardEffectActivationContext context)
         {
-            // TECH DEBT - wrong event
-            var cardEvent = new CardEvent(CardEvent.CardEventType.CardAdded);
+            var cardEvent = new CardGameEvent(Events.EventType.CardActivationSuccess);
             RaiseEvent(cardEvent);
             if (cardEvent.IsCancelled)
                 return;
@@ -98,7 +104,7 @@ namespace CcgCore.Controller.Cards
             activationEffects.ActivationEffects.ForEach(e =>
             {
                 if (!context.wasActionCancelled)
-                    e.ActivateEffects(context);
+                    e.ActivateEffects(context, this);
             });
 
             if (activationEffects.DestroyWhenPlayed)
@@ -109,7 +115,8 @@ namespace CcgCore.Controller.Cards
 
         public void FailToPlayCard(CardEffectActivationContext context)
         {
-
+            var cardEvent = new CardGameEvent(Events.EventType.CardActivationFailure);
+            RaiseEvent(cardEvent);
         }
     }
 }

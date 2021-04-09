@@ -37,7 +37,7 @@ namespace CcgCore.Controller.Cards
             var stack = new CardStack(this);
             cardStacks.Add(stack);
             stack.AddCard(card);
-            CardEvent cardGameEvent = new CardEvent(CardEvent.CardEventType.CardAdded);
+            var cardGameEvent = new CardGameEvent(EventType.CardAddedToRegion);
             card.RaiseEvent(cardGameEvent);
 
             if (cardGameEvent.IsCancelled)
@@ -60,6 +60,7 @@ namespace CcgCore.Controller.Cards
                 RemoveChild(scope);
                 cardStacks.Remove(scope);
             }
+            var cardGameEvent = new CardGameEvent(EventType.CardRemovedFromRegion);
 
             OnCardAdded?.Invoke();
         }

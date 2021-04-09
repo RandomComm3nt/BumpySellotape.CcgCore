@@ -7,11 +7,11 @@ namespace CcgCore.Controller.Events
     {
         public List<ParameterScope> callingHeirachy;
 
-        public string EventType { get; }
+        public EventType EventType { get; }
         public bool IsCancelled { get; private set;  }
         public override string ToString() => $"EventType: {EventType}";
 
-        public CardGameEvent(string eventType)
+        public CardGameEvent(EventType eventType)
         {
             EventType = eventType;
             callingHeirachy = new List<ParameterScope>();
