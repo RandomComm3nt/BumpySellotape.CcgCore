@@ -40,7 +40,7 @@ namespace CcgCore.Model.Effects.Conditions
                     return "[" + CardGameEditor.CardGameConfig.GetTagName(tags[0]) + "]";
                 if (checkCounters)
                     return $"Counters {counterOperator} {counterValue}";
-                return "[Empty Condition]";
+                return "[Condition]";
             }
         }
     }

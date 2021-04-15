@@ -12,9 +12,9 @@ namespace CcgCore.Controller.Actors
         public ActorFieldSide(CardGameControllerBase cardGameController, ParameterScope parentScope = null)
             : base(parentScope ?? cardGameController)
         {
-            Deck = new FieldRegion(cardGameController, this);
-            Hand = new FieldRegion(cardGameController, this);
-            DiscardPile = new FieldRegion(cardGameController, this);
+            //Deck = new FieldRegion(cardGameController, this);
+            //Hand = new FieldRegion(cardGameController, this);
+            //DiscardPile = new FieldRegion(cardGameController, this);
         }
 
         public void DrawCard(Card card)

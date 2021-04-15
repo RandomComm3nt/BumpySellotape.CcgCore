@@ -25,7 +25,7 @@ namespace CcgCore.Model.Effects
                 ActorSelector.TriggerActor => context.triggerActor,
                 _ => throw new NotImplementedException(),
             };
-            var theActor = new List<Actor> { actor.actor };
+            var theActor = new List<Actor> { actor.Actor };
 
             return actorFilter switch
             {

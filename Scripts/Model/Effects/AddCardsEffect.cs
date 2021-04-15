@@ -1,5 +1,6 @@
 ﻿using CcgCore.Controller.Cards;
 using CcgCore.Model.Cards;
+using CcgCore.Model.Config;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace CcgCore.Model.Effects
     public class AddCardsEffect : TargetedCardEffect
     {
         [SerializeField, FoldoutGroup("@DisplayLabel")] private RegionSelectionType regionSelectionType;
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("regionSelectionType", RegionSelectionType.ByTemplate)] private FieldTemplateScope regionTemplate;
         [SerializeField, FoldoutGroup("@DisplayLabel"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cards = new List<CardDefinition>();
 
         public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
@@ -22,7 +24,7 @@ namespace CcgCore.Model.Effects
                 {
                     RegionSelectionType.All => scopes,
                     RegionSelectionType.Random => scopes.GetRange(Random.Range(0, scopes.Count), 1),
-                    RegionSelectionType.ByTemplate => throw new System.Exception(),
+                    RegionSelectionType.ByTemplate => scopes.Where(r => r.TemplateScope == regionTemplate),
                     _ => throw new System.NotImplementedException(),
                 };
                 foreach (var region in regions)

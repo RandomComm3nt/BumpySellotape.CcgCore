@@ -16,7 +16,6 @@ namespace CcgCore.Controller.Actors
             this.turnSystem = turnSystem;
             turnSystem.AddActor(this);
             ActorScope = actorScope;
-            actorScope.actor = this;
             StatCollection = new StatCollection();
         }
 
@@ -41,13 +40,7 @@ namespace CcgCore.Controller.Actors
 
         public void SetTemplate(ActorTemplate playerTemplate)
         {
-            for (int i = 0; i < playerTemplate.Regions.Count; i++)
-            {
-                // TECH DEBT - Matching regions by index is bad, casting to FieldRegion is bad
-                foreach (var cd in playerTemplate.Regions[i].Cards)
-                    (ActorScope.ChildScopes[i] as FieldRegion).AddCard(cd);
-            }
-
+            ActorScope.Initialise(this, playerTemplate);
 
             StatCollection.GenerateFromTemplates(playerTemplate.StatTemplates);
         }

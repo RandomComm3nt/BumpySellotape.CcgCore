@@ -19,7 +19,8 @@ namespace CcgCore.Model.Cards
 
 
         [field: OdinSerialize, HideReferenceObjectPicker] public List<CardDefinitionModule> Modules { get; private set; } = new List<CardDefinitionModule>();
-        [field: SerializeField] public bool DebugCard { get; private set; }
+        [field: SerializeField, HorizontalGroup("Metadata")] public bool DebugCard { get; private set; }
+        [field: SerializeField, HorizontalGroup("Metadata")] public bool DisableCard { get; private set; }
 
         public T GetModule<T>() where T : CardDefinitionModule
         {

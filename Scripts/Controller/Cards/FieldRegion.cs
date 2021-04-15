@@ -1,5 +1,6 @@
 ﻿using CcgCore.Controller.Events;
 using CcgCore.Model.Cards;
+using CcgCore.Model.Config;
 using CcgCore.Model.Parameters;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,18 +13,19 @@ namespace CcgCore.Controller.Cards
         public event RegionChange OnCardAdded;
 
         private readonly List<CardStack> cardStacks;
-        private readonly CardGameControllerBase cardGameController;
 
-        public FieldRegion(CardGameControllerBase cardGameController, ParameterScope parentScope = null)
-            : base(ParameterScopeLevel.Region, parentScope ?? cardGameController)
+        public FieldTemplateScope TemplateScope { get; }
+
+        public FieldRegion(FieldTemplateScope templateScope, ParameterScope parentScope)
+            : base(ParameterScopeLevel.Region, parentScope)
         {
             cardStacks = new List<CardStack>();
-            this.cardGameController = cardGameController;
+            TemplateScope = templateScope;
         }
 
         public void AddCard(CardDefinition cardDefinition)
         {
-            var card = cardGameController.CardFactory.CreateCard(cardDefinition, null);
+            var card = CardGameController.CardFactory.CreateCard(cardDefinition, null);
             AddCardToNewStack(card);
         }
 
