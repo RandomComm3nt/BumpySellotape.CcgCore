@@ -1,5 +1,5 @@
-﻿using CcgCore.Controller.Cards;
-using CcgCore.Model.Effects.Conditions;
+﻿using CcgCore.Model.Effects.Conditions;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -14,7 +14,7 @@ namespace CcgCore.Model.Effects
 
         protected override bool HideTargettingFields => useSelectedCards;
 
-        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
             if (useSelectedCards)
             {

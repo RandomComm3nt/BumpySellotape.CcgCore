@@ -11,5 +11,6 @@
         TurnEnd = 21,
         CountersAddedToCard = 30,
         CountersRemovedFromCard = 31,
+        StatChanged = 40,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CcgCore.Controller.Actors;
 using CcgCore.Controller.Cards;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,12 @@ namespace CcgCore.Model.Effects
         protected string TargetString => $"{actorFilter} {actorSelector}";
         protected virtual bool HideTargettingFields => false; 
 
-        protected List<Actor> GetTargetActors(CardEffectActivationContext context, Card thisCard)
+        protected List<Actor> GetTargetActors(CardEffectActivationContext context, ParameterScope thisScope)
         {
             var ts = context.cardGameController.TurnSystem;
             var actor = actorSelector switch
             {
-                ActorSelector.OwnerOfThisCard => thisCard.ActorScope,
+                ActorSelector.OwnerOfThisCard => thisScope.ActorScope,
                 ActorSelector.TriggerActor => context.triggerActor,
                 _ => throw new NotImplementedException(),
             };

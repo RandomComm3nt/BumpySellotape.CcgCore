@@ -1,4 +1,4 @@
-﻿using CcgCore.Controller.Cards;
+﻿using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using Stats.Model;
 using UnityEngine;
@@ -10,9 +10,9 @@ namespace CcgCore.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayLabel")] private StatType statType;
         [SerializeField, FoldoutGroup("@DisplayLabel"), LabelText("Change by")] private float changeDelta = 0f;
 
-        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
-            var targets = GetTargetActors(context, thisCard);
+            var targets = GetTargetActors(context, thisScope);
             foreach (var actor in targets)
             {
                 if (actor.StatCollection.GetStat(statType, out var stat))
@@ -22,6 +22,6 @@ namespace CcgCore.Model.Effects
             }
         }
 
-        public override string DisplayLabel => $"Change {statType.DisplayName} by {changeDelta}";
+        public override string DisplayLabel => $"Change {(statType ? statType.DisplayName : "[stat]")} by {changeDelta}";
     }
 }

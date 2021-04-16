@@ -1,6 +1,7 @@
 ﻿using CcgCore.Controller.Cards;
 using CcgCore.Model.Cards;
 using CcgCore.Model.Config;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace CcgCore.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("regionSelectionType", RegionSelectionType.ByTemplate)] private FieldTemplateScope regionTemplate;
         [SerializeField, FoldoutGroup("@DisplayLabel"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cards = new List<CardDefinition>();
 
-        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
-            var targets = GetTargetActors(context, thisCard);
+            var targets = GetTargetActors(context, thisScope);
             foreach (var actor in targets)
             {
                 var scopes = actor.ActorScope.GetAllChildScopesAtLevel(Parameters.ParameterScopeLevel.Region).Select(s => s as FieldRegion).ToList();

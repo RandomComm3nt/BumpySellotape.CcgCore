@@ -1,6 +1,10 @@
 ﻿using CcgCore.Controller.Cards;
+using CcgCore.Controller.Events;
 using CcgCore.Model;
+using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CcgCore.Controller.Actors
 {
@@ -23,6 +27,16 @@ namespace CcgCore.Controller.Actors
                 foreach (var cd in playerTemplate.Regions[i].Cards)
                     region.AddCard(cd);
             }
+        }
+
+        protected override List<(ParameterScope scope, TriggeredEffect effect)> GetTriggeredEffectsForEvent(CardGameEvent cardGameEvent)
+        {
+            if (Actor == null || !Actor.ActorTemplate)
+                return base.GetTriggeredEffectsForEvent(cardGameEvent);
+            return Actor.ActorTemplate.TriggeredEffects
+                .Where(te => te.CheckConditions(cardGameEvent, this))
+                .Select(te => (this as ParameterScope, te))
+                .ToList();
         }
     }
 }

@@ -60,7 +60,7 @@ namespace CcgCore.Model.Effects
             foreach (var e in effects)
             {
                 if (!context.wasActionCancelled)
-                    e.ActivateEffects(context, thisScope as Card);
+                    e.ActivateEffects(context, thisScope);
             }
         }
 

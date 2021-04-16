@@ -1,4 +1,5 @@
 ﻿using CcgCore.Controller;
+using CcgCore.Controller.Actors;
 using CcgCore.Controller.Events;
 using CcgCore.Model.Effects;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace CcgCore.Model.Parameters
         public List<ParameterScope> ChildScopes { get; }
         public ParameterScope RootScope => ParentScope == null ? this : ParentScope.RootScope;
         public CardGameControllerBase CardGameController => GetHigherScope(ParameterScopeLevel.Game) as CardGameControllerBase;
+        public ActorScope ActorScope => (GetHigherScope(ParameterScopeLevel.Actor) as ActorScope);
 
         protected ParameterScope(ParameterScopeLevel scopeLevel, ParameterScope parentScope)
         {

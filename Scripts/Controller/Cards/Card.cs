@@ -1,5 +1,4 @@
-﻿using CcgCore.Controller.Actors;
-using CcgCore.Controller.Events;
+﻿using CcgCore.Controller.Events;
 using CcgCore.Model;
 using CcgCore.Model.Cards;
 using CcgCore.Model.Effects;
@@ -16,7 +15,6 @@ namespace CcgCore.Controller.Cards
 
         public CardDefinition CardDefinition { get; private set; }
         public int Counters { get; private set; }
-        public ActorScope ActorScope => (GetHigherScope(ParameterScopeLevel.Actor) as ActorScope);
 
         internal Card(CardDefinition cardDefinition, ParameterScope parent)
             : base(ParameterScopeLevel.Card, parent)
@@ -104,20 +102,7 @@ namespace CcgCore.Controller.Cards
             if (cardEvent.IsCancelled)
                 return;
 
-            var activationEffects = CardDefinition.GetModule<CardActivationEffects>();
-            if (activationEffects == null)
-                return;
-
-            activationEffects.ActivationEffects.ForEach(e =>
-            {
-                if (!context.wasActionCancelled)
-                    e.ActivateEffects(context, this);
-            });
-
-            if (activationEffects.DestroyWhenPlayed)
-            {
-                ParentScope?.RemoveChild(this);
-            }
+            CardDefinition.Modules.ForEach(m => m.ActivateCard(context, this));
         }
 
         public void FailToPlayCard(CardEffectActivationContext context)

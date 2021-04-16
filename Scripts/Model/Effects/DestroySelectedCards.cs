@@ -1,4 +1,4 @@
-﻿using CcgCore.Controller.Cards;
+﻿using CcgCore.Model.Parameters;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace CcgCore.Model.Effects
         [SerializeField] private bool destroyCopies = false;
         [SerializeField] private Scope scope = Scope.TargetStack;
 
-        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
             if (destroyCopies)
             {

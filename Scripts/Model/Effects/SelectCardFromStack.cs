@@ -1,4 +1,5 @@
 ﻿using CcgCore.Controller.Cards;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace CcgCore.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayLabel")] private CardFilter cardFilter = null;
         [SerializeField, FoldoutGroup("@DisplayLabel")] private StackCardSelectionType stackCardSelectionType = StackCardSelectionType.Bottom;
 
-        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
             var targets = GetValidTargets(context);
             Card target = null;

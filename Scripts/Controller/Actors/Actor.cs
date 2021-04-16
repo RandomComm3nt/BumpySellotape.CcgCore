@@ -11,17 +11,19 @@ namespace CcgCore.Controller.Actors
         private int cardsPlayedThisTurn;
         private readonly TurnSystem turnSystem;
 
+        public virtual string Name { get; } = "-";
+        public ActorScope ActorScope { get; }
+        public StatCollection StatCollection { get; private set; }
+        public ActorTemplate ActorTemplate { get; private set; }
+
         public Actor(TurnSystem turnSystem, ActorScope actorScope)
         {
             this.turnSystem = turnSystem;
             turnSystem.AddActor(this);
             ActorScope = actorScope;
             StatCollection = new StatCollection();
+            StatCollection.OnAnyStatValueChange += () => actorScope.RaiseEvent(new Events.CardGameEvent(Events.EventType.StatChanged));
         }
-
-        public virtual string Name { get; } = "-";
-        public ActorScope ActorScope { get; }
-        public StatCollection StatCollection { get; private set; }
 
         public void StartTurn()
         {
@@ -38,11 +40,12 @@ namespace CcgCore.Controller.Actors
             ActorScope.RaiseEvent(new Events.CardGameEvent(Events.EventType.TurnEnd));
         }
 
-        public void SetTemplate(ActorTemplate playerTemplate)
+        public void SetTemplate(ActorTemplate actorTemplate)
         {
-            ActorScope.Initialise(this, playerTemplate);
+            ActorTemplate = actorTemplate;
+            ActorScope.Initialise(this, actorTemplate);
 
-            StatCollection.GenerateFromTemplates(playerTemplate.StatTemplates);
+            StatCollection.GenerateFromTemplates(actorTemplate.StatTemplates);
         }
 
         public void PlayCard(Card card)

@@ -1,5 +1,6 @@
 ﻿using CcgCore.Controller.Cards;
 using CcgCore.Model.Effects.Conditions;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System.Linq;
 using UnityEngine;
@@ -14,14 +15,14 @@ namespace CcgCore.Model.Effects
 
         protected override bool HideTargettingFields => useSelectedCards;
 
-        public override void ActivateEffects(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
             if (useSelectedCards)
             {
                 context.selectedCards.ForEach(c => c.Remove());
                 return;
             }
-            var targets = GetTargetActors(context, thisCard);
+            var targets = GetTargetActors(context, thisScope);
             foreach (var actor in targets)
             {
                 var cards = actor.ActorScope.GetAllChildScopesAtLevel(Parameters.ParameterScopeLevel.Card).ToList();

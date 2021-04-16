@@ -14,6 +14,9 @@ namespace CcgCore.Controller
         public CardFactory CardFactory { get; }
         public TurnSystem TurnSystem { get; protected set; }
 
+        public delegate void OutputMessageSent(string message);
+        public event OutputMessageSent OnOutputMessageSent;
+
         public CardGameControllerBase(CardGameConfig config) 
             : base(ParameterScopeLevel.Game, null)
         {
@@ -26,6 +29,11 @@ namespace CcgCore.Controller
         {
             base.RaiseEvent(cardGameEvent);
             eventOrchestrator.RaiseEvent(cardGameEvent, this);
+        }
+
+        public void OutputMessage(string message)
+        {
+            OnOutputMessageSent?.Invoke(message);
         }
     }
 }
