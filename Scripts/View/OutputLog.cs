@@ -16,7 +16,7 @@ namespace BumpySellotape.CcgCore.View
         public void AddMessage(string message)
         {
             if (textLog.text.Length > 0)
-                textLog.text += "/r/n/r/n";
+                textLog.text += "\r\n\r\n";
             textLog.text += message;
         }
     }

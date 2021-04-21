@@ -1,19 +1,21 @@
-﻿using CcgCore.Controller.Cards;
+﻿using CcgCore.Model;
 using CcgCore.Model.Effects;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace CcgCore.Model.Cards.Modules
+namespace BumpySellotape.CcgCore.CcgCore.Model.Effects
 {
-    public class ActivationText : CardDefinitionModule
+    public class AddTextEffect : CardEffect
     {
         //[SerializeField, FoldoutGroup("Activation Text"), ListDrawerSettings(CustomAddFunction = "AddTextOption"), HideReferenceObjectPicker] private List<TextOption> context = new List<TextOption>();
         [SerializeField, FoldoutGroup("Activation Text"), ListDrawerSettings(CustomAddFunction = "AddActionTextOption"), HideReferenceObjectPicker] private List<ActionTextOption> action = new List<ActionTextOption>();
         [SerializeField, FoldoutGroup("Activation Text"), ListDrawerSettings(CustomAddFunction = "AddTextOption"), HideReferenceObjectPicker] private List<TextOption> flavour = new List<TextOption>();
 
-        public override void ActivateCard(CardEffectActivationContext context, Card thisCard)
+        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
             context.cardGameController.OutputMessage(CreateOutputText());
         }
@@ -31,7 +33,7 @@ namespace CcgCore.Model.Cards.Modules
             if (actionWithoutFlavour == null)
             {
                 if (actionWithFlavour == null)
-                    throw new System.Exception();
+                    throw new Exception();
                 return CreateOutputFromOptions(actionWithFlavour, chosenFlavour);
             }
             else
@@ -76,10 +78,10 @@ namespace CcgCore.Model.Cards.Modules
         private class TextOption
         {
             [field: SerializeField, FoldoutGroup("@DisplayLabel")] public List<TriggerCondition> Conditions { get; private set; } = new List<TriggerCondition>();
-            [field: SerializeField, FoldoutGroup("@DisplayLabel")] public string Text { get; private set; } = "";
+            [field: SerializeField, FoldoutGroup("@DisplayLabel"), TextArea(1, 5)] public string Text { get; private set; } = "";
             [field: SerializeField, FoldoutGroup("@DisplayLabel")] public float Priority { get; private set; }
 
-            private string DisplayLabel => Text.Length > 70 ? Text.Substring(0, 67) + "..." : Text;
+            private string DisplayLabel => Text.Length > 60 ? Text.Substring(0, 57) + "..." : Text;
         }
 
         private class ActionTextOption : TextOption
