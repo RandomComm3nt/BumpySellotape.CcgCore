@@ -1,4 +1,5 @@
-﻿using CcgCore.Controller;
+﻿using BumpySellotape.CcgCore.Model.Effects;
+using CcgCore.Controller;
 using CcgCore.Controller.Actors;
 using CcgCore.Controller.Cards;
 using System.Collections.Generic;
@@ -19,5 +20,7 @@ namespace CcgCore.Model
         public CardGameControllerBase cardGameController;
 
         public ActorScope triggerActor;
+
+        public List<CommonEffect.ParameterisedCalculationFactor> parameters;
     }
 }

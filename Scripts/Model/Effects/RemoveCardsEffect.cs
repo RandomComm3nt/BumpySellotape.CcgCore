@@ -11,6 +11,7 @@ namespace CcgCore.Model.Effects
     {
         [SerializeField, FoldoutGroup("@DisplayLabel"), PropertyOrder(-1)] private bool useSelectedCards;
         [SerializeField, FoldoutGroup("@DisplayLabel"), HideIf("HideTargettingFields"), HideLabel, HideReferenceObjectPicker] private CardCondition cardCondition = new CardCondition();
+        [SerializeField, FoldoutGroup("@DisplayLabel")] private bool logAction = false;
         //TODO features for first/all/random/choose
 
         protected override bool HideTargettingFields => useSelectedCards;
@@ -19,30 +20,39 @@ namespace CcgCore.Model.Effects
         {
             if (useSelectedCards)
             {
-                context.selectedCards.ForEach(c => c.Remove());
+                context.selectedCards.ForEach(c => RemoveCard(context, c));
                 return;
             }
             var targets = GetTargetActors(context, thisScope);
             foreach (var actor in targets)
             {
-                var cards = actor.ActorScope.GetAllChildScopesAtLevel(Parameters.ParameterScopeLevel.Card).ToList();
+                var cards = actor.ActorScope.GetAllChildScopesAtLevel(ParameterScopeLevel.Card).ToList();
                 foreach (var scope in cards)
                 {
                     var card = scope as Card;
                     if (cardCondition.CheckCondition(card))
-                        card.Remove();
+                        RemoveCard(context, card);
                 }
             }
+        }
+
+        private void RemoveCard(CardEffectActivationContext context, Card c)
+        {
+            if (logAction)
+                context.cardGameController.OutputMessage($"[{c.CardDefinition.name} removed]");
+            c.Remove();
         }
 
         public override string DisplayLabel
         {
             get
             {
+                string c = "cards";
                 if (useSelectedCards)
-                    return "Remove selected cards";
-                /*cards.Count == 1 && cards[0] ? $"Add card {cards[0].name} to {TargetString}" : */
-                return $"Remove cards from {TargetString}";
+                    c = "selected cards";
+                if (cardCondition.HasNiceDisplayLabel)
+                    c = cardCondition.DisplayLabel;
+                return $"Remove {c} from {TargetString}";
             }
         }
     }

@@ -29,6 +29,8 @@ namespace CcgCore.Model.Effects.Conditions
             ;
         }
 
+        public bool HasNiceDisplayLabel => (checkCard && cardDefinitions.Count == 1 && cardDefinitions[0]) || (checkCardTags && tags.Count == 1);
+
 #if UNITY_EDITOR
         public override string DisplayLabel
         {

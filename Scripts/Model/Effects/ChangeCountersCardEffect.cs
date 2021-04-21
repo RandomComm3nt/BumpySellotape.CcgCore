@@ -1,7 +1,8 @@
-﻿using CcgCore.Model.Effects.Conditions;
+﻿using CcgCore.Controller.Cards;
+using CcgCore.Model.Effects.Conditions;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
-using System;
+using System.Linq;
 using UnityEngine;
 
 namespace CcgCore.Model.Effects
@@ -21,7 +22,17 @@ namespace CcgCore.Model.Effects
                 context.selectedCards.ForEach(c => c.ChangeCounters(value));
                 return;
             }
-            throw new NotImplementedException();
+            var targets = GetTargetActors(context, thisScope);
+            foreach (var actor in targets)
+            {
+                var cards = actor.ActorScope.GetAllChildScopesAtLevel(ParameterScopeLevel.Card).ToList();
+                foreach (var scope in cards)
+                {
+                    var card = scope as Card;
+                    if (cardCondition.CheckCondition(card))
+                        card.ChangeCounters(value);
+                }
+            }
         }
 
         public override string DisplayLabel
