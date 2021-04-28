@@ -1,3 +1,4 @@
+using BumpySellotape.CcgCore.Controller.Actors;
 using CcgCore.Model.Cards;
 using CcgCore.Model.Config;
 using CcgCore.Model.Effects;
@@ -13,9 +14,11 @@ namespace CcgCore.Model
     [CreateAssetMenu(menuName = "Actors/Actor Template")]
     public class ActorTemplate : SerializedScriptableObject
     {
+        [field: SerializeField] public string ActorName { get; private set; }
         [field: SerializeField] public List<ActorTemplateRegion> Regions { get; private set; } = new List<ActorTemplateRegion>();
         [field: SerializeField] public List<GeneratedStatTemplate> StatTemplates { get; private set; } = new List<GeneratedStatTemplate>();
         [field: OdinSerialize] public List<TriggeredEffect> TriggeredEffects { get; private set; } = new List<TriggeredEffect>();
+        [field: OdinSerialize] public ActorBehaviour ActorBehaviour { get; private set; }
     }
 
     [Serializable]
