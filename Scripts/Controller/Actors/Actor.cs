@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace CcgCore.Controller.Actors
 {
-    public abstract class Actor
+    public class Actor
     {
         private bool isTurn;
         private int cardsPlayedThisTurn;
         private readonly TurnSystem turnSystem;
 
-        public virtual string Name { get; } = "-";
+        public string Name => ActorTemplate.ActorName;
         public ActorScope ActorScope { get; }
         public StatCollection StatCollection { get; private set; }
         public ActorTemplate ActorTemplate { get; private set; }
@@ -30,9 +30,9 @@ namespace CcgCore.Controller.Actors
             isTurn = true;
             cardsPlayedThisTurn = 0;
             ActorScope.RaiseEvent(new Events.CardGameEvent(Events.EventType.TurnStart));
-        }
 
-        public abstract void DoTurn();
+            ActorTemplate.ActorBehaviour.DoTurn(this);
+        }
 
         public void EndTurn()
         {
@@ -61,10 +61,15 @@ namespace CcgCore.Controller.Actors
             CheckIfShouldEndTurn();
         }
 
-        protected virtual void CheckIfShouldEndTurn()
+        public void CheckIfShouldEndTurn()
         {
             if (isTurn && cardsPlayedThisTurn == 1)
-                turnSystem.EndCurrentTurn();
+                EndCurrentTurn();
+        }
+
+        public void EndCurrentTurn()
+        {
+            turnSystem.EndCurrentTurn();
         }
     }
 }
