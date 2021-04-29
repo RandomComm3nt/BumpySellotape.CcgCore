@@ -16,6 +16,7 @@ namespace CcgCore.Model.Cards
         public string Description { get; private set; }
         [field: SerializeField] 
         public List<CardDefinition> PossibleTargets { get; private set; } = new List<CardDefinition>();
+        [field: SerializeField] public Sprite Sprite { get; private set; }
 
 
         [field: OdinSerialize, HideReferenceObjectPicker] public List<CardDefinitionModule> Modules { get; private set; } = new List<CardDefinitionModule>();
