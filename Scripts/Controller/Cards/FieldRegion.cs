@@ -11,6 +11,9 @@ namespace CcgCore.Controller.Cards
     {
         public delegate void RegionChange();
         public event RegionChange OnCardAdded;
+        public delegate void RegionCardStackChange(CardStack cardStack);
+        public event RegionCardStackChange OnCardStackAdded;
+        public event RegionCardStackChange OnCardStackRemoved;
 
         private readonly List<CardStack> cardStacks;
 
@@ -49,6 +52,7 @@ namespace CcgCore.Controller.Cards
                 return;
             }
 
+            OnCardStackAdded?.Invoke(stack);
             OnCardAdded?.Invoke();
         }
 
@@ -61,6 +65,7 @@ namespace CcgCore.Controller.Cards
                 CardStack scope = cardStacks.First(cs => cs.BaseCard == card);
                 RemoveChild(scope);
                 cardStacks.Remove(scope);
+                OnCardStackRemoved?.Invoke(scope);
             }
             var cardGameEvent = new CardGameEvent(EventType.CardRemovedFromRegion);
 
