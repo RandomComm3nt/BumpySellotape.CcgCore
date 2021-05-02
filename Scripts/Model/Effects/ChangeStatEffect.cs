@@ -21,8 +21,9 @@ namespace CcgCore.Model.Effects
             {
                 if (actor.StatCollection.GetStat(statType, out var stat))
                 {
-                    float value = additiveFactors.Sum(f => f.GetValue(context, actor, 0f)) 
-                        * multiplicativeFactors.Select(f => f.GetValue(context, actor, 1f)).Aggregate(1f, (a, b) => a * b);
+                    float additiveFactor = additiveFactors?.Sum(f => f.GetValue(context, actor, 0f)) ?? 0f;
+                    float multiplicativeFactor = multiplicativeFactors?.Select(f => f.GetValue(context, actor, 1f)).Aggregate(1f, (a, b) => a * b) ?? 1f;
+                    float value = additiveFactor * multiplicativeFactor;
                     stat.ChangeValue(value);
                 }
             }
