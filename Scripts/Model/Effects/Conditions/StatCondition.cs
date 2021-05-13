@@ -1,5 +1,5 @@
-﻿using CcgCore.Controller.Actors;
-using CcgCore.Model.Effects.Conditions;
+﻿using BumpySellotape.Events.Model.Conditions;
+using CcgCore.Controller.Actors;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using Stats.Model;
@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BumpySellotape.CcgCore.CcgCore.Model.Effects.Conditions
 {
-    public class StatCondition : Condition
+    public class StatCondition : BumpySellotape.CcgCore.Model.Effects.Conditions.Condition
     {
         [SerializeField, FoldoutGroup("@DisplayLabel")] private StatType statType;
         [SerializeField, FoldoutGroup("@DisplayLabel")] private ComparisonOperator comparisonOperator;

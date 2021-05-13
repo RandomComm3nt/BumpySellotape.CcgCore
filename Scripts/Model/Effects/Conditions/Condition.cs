@@ -1,7 +1,7 @@
 ﻿using CcgCore.Model.Parameters;
 using System;
 
-namespace CcgCore.Model.Effects.Conditions
+namespace BumpySellotape.CcgCore.Model.Effects.Conditions
 {
     public abstract class Condition
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CcgCore.Model.Effects.Conditions
 {
-    public class CardExistsCondition : Condition
+    public class CardExistsCondition : BumpySellotape.CcgCore.Model.Effects.Conditions.Condition
     {
         [SerializeField, FoldoutGroup("@DisplayLabel")] private bool invertCondition;
         [SerializeField, HideReferenceObjectPicker, FoldoutGroup("@DisplayLabel"), HideLabel] private CardCondition cardCondition = new CardCondition();

@@ -1,4 +1,5 @@
-﻿using CcgCore.Controller;
+﻿using BumpySellotape.Events.Model.Conditions;
+using CcgCore.Controller;
 using CcgCore.Controller.Cards;
 using CcgCore.Model.Cards;
 using Sirenix.OdinInspector;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace CcgCore.Model.Effects.Conditions
 {
-    public class CardCondition : Condition<Card>
+    public class CardCondition : BumpySellotape.CcgCore.Model.Effects.Conditions.Condition<Card>
     {
         [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCard = false;
         [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCard"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cardDefinitions = new List<CardDefinition>();
