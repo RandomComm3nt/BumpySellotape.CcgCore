@@ -83,5 +83,13 @@ namespace CcgCore.Model.Parameters
                 .Where(s => s.ScopeLevel == scopeLevel)
                 .ToList();
         }
+
+        public List<T> GetAllChildScopesOfType<T>() where T : ParameterScope
+        {
+            return GetAllChildScopes()
+                .Where(s => s is T)
+                .Select(s => s as T)
+                .ToList();
+        }
     }
 }

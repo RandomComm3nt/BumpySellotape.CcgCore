@@ -1,20 +1,21 @@
-﻿using CcgCore.Controller.Cards;
+﻿using BumpySellotape.TurnBased.Controller.Actors;
+using CcgCore.Controller.Cards;
 using CcgCore.Controller.Events;
 using CcgCore.Model;
-using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
-using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace CcgCore.Controller.Actors
 {
     public class ActorScope : ParameterScope
     {
+        private int cardsPlayedThisTurn;
         public Actor Actor { get; private set; }
 
         public ActorScope(ParameterScope parentScope) 
             : base(ParameterScopeLevel.Actor, parentScope)
         {
+            Actor.StatCollection.OnAnyStatValueChange += () => RaiseEvent(new CardGameEvent(Events.EventType.StatChanged));
         }
 
         public void Initialise(Actor actor, ActorTemplate playerTemplate)
@@ -29,6 +30,37 @@ namespace CcgCore.Controller.Actors
             }
         }
 
+        public void PlayCard(Card card)
+        {
+            if (!Actor.IsTurn)
+            {
+                Debug.LogWarning("Tried to play a card when it was not the actor's turn");
+                return;
+            }
+
+            card.AttemptPlayCard(null);
+            cardsPlayedThisTurn++;
+            CheckIfShouldEndTurn();
+        }
+
+        public void CheckIfShouldEndTurn()
+        {
+            if (Actor.IsTurn && cardsPlayedThisTurn == 1)
+                Actor.EndCurrentTurn();
+        }
+
+        public void StartTurn()
+        {
+            cardsPlayedThisTurn = 0;
+            RaiseEvent(new Events.CardGameEvent(Events.EventType.TurnStart));
+        }
+
+        public void EndTurn()
+        {
+            RaiseEvent(new Events.CardGameEvent(Events.EventType.TurnEnd));
+        }
+
+        /*
         protected override List<(ParameterScope scope, TriggeredEffect effect)> GetTriggeredEffectsForEvent(CardGameEvent cardGameEvent)
         {
             if (Actor == null || !Actor.ActorTemplate)
@@ -38,5 +70,6 @@ namespace CcgCore.Controller.Actors
                 .Select(te => (this as ParameterScope, te))
                 .ToList();
         }
+        */
     }
 }

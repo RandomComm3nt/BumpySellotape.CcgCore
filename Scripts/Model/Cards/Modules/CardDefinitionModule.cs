@@ -1,4 +1,4 @@
-﻿using CcgCore.Controller.Actors;
+﻿using BumpySellotape.TurnBased.Controller.Actors;
 using CcgCore.Controller.Cards;
 
 namespace CcgCore.Model.Cards
