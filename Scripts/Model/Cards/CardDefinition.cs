@@ -1,7 +1,9 @@
-﻿using Sirenix.OdinInspector;
+﻿using BumpySellotape.Events.Model.Actions;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace CcgCore.Model.Cards
@@ -27,5 +29,34 @@ namespace CcgCore.Model.Cards
         {
             return Modules.FirstOrDefault(m => m.GetType() == typeof(T)) as T;
         }
+
+#if UNITY_EDITOR
+        [Button, ShowInInspector]
+        private void ConvertToAction()
+        {
+            var a = CreateInstance<ActionDefinition>();
+            a.name = name;
+
+            a.GetType().GetProperty(nameof(a.Description)).SetValue(a, Description);
+            
+            a.GetType().GetProperty(nameof(a.DebugAction)).SetValue(a, DebugCard);
+            a.GetType().GetProperty(nameof(a.DisableAction)).SetValue(a, DisableCard);
+
+            var path = AssetDatabase.GetAssetPath(this);
+            var parentFolder = path.Substring(0, path.IndexOf(name));
+            if (!AssetDatabase.IsValidFolder(parentFolder + "Archive"))
+            {
+                Debug.Log("Creating folder: " + parentFolder);
+                var guid = AssetDatabase.CreateFolder(parentFolder.Substring(0, parentFolder.Length - 1), "Archive");
+            }
+            var e = AssetDatabase.MoveAsset(path, path.Replace(name, "Archive/" + name));
+            if (string.IsNullOrEmpty(e))
+            {
+                AssetDatabase.CreateAsset(a, path);
+            }
+            else
+                Debug.LogWarning(e);
+        }
+#endif
     }
 }
