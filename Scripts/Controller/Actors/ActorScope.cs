@@ -1,4 +1,5 @@
-﻿using BumpySellotape.TurnBased.Controller.Actors;
+﻿using BumpySellotape.TurnBased.Controller;
+using BumpySellotape.TurnBased.Controller.Actors;
 using CcgCore.Controller.Cards;
 using CcgCore.Controller.Events;
 using CcgCore.Model;
@@ -32,7 +33,7 @@ namespace CcgCore.Controller.Actors
 
         public void PlayCard(Card card)
         {
-            if (!Actor.IsTurn)
+            if (Actor.ActorState != ActorState.DoingAction)
             {
                 Debug.LogWarning("Tried to play a card when it was not the actor's turn");
                 return;
@@ -45,8 +46,10 @@ namespace CcgCore.Controller.Actors
 
         public void CheckIfShouldEndTurn()
         {
-            if (Actor.IsTurn && cardsPlayedThisTurn == 1)
+            if (Actor.ActorState == ActorState.ActionTaken && cardsPlayedThisTurn == 1)
                 Actor.EndCurrentTurn();
+            else
+                Actor.BeginActionSelection();
         }
 
         public void StartTurn()

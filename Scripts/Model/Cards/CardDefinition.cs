@@ -39,8 +39,8 @@ namespace CcgCore.Model.Cards
 
             a.GetType().GetProperty(nameof(a.Description)).SetValue(a, Description);
             
-            a.GetType().GetProperty(nameof(a.DebugAction)).SetValue(a, DebugCard);
-            a.GetType().GetProperty(nameof(a.DisableAction)).SetValue(a, DisableCard);
+            //a.GetType().GetProperty(nameof(a.DebugAction)).SetValue(a, DebugCard);
+            //a.GetType().GetProperty(nameof(a.DisableAction)).SetValue(a, DisableCard);
 
             var path = AssetDatabase.GetAssetPath(this);
             var parentFolder = path.Substring(0, path.IndexOf(name));
