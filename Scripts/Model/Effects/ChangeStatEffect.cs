@@ -1,6 +1,6 @@
-﻿using CcgCore.Model.Parameters;
+﻿using BumpySellotape.Stats.Model;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
-using Stats.Model;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
