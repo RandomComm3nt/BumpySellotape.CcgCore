@@ -1,6 +1,6 @@
-﻿using CcgCore.Controller.Actors;
+﻿using BumpySellotape.Core.Stats.Model;
+using BumpySellotape.TurnBased.Controller.Actors;
 using Sirenix.OdinInspector;
-using Stats.Model;
 using System.Linq;
 using UnityEngine;
 

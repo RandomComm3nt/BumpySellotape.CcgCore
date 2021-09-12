@@ -1,6 +1,6 @@
-﻿using CcgCore.Model.Parameters;
+﻿using BumpySellotape.Core.Stats.Model;
+using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
-using Stats.Model;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,10 +19,10 @@ namespace CcgCore.Model.Effects
             var targets = GetTargetActors(context, thisScope);
             foreach (var actor in targets)
             {
-                if (actor.StatCollection.GetStat(statType, out var stat))
+                if (actor.Actor.StatCollection.GetStat(statType, out var stat))
                 {
-                    float additiveFactor = additiveFactors?.Sum(f => f.GetValue(context, actor, 0f)) ?? 0f;
-                    float multiplicativeFactor = multiplicativeFactors?.Select(f => f.GetValue(context, actor, 1f)).Aggregate(1f, (a, b) => a * b) ?? 1f;
+                    float additiveFactor = additiveFactors?.Sum(f => f.GetValue(context, actor.Actor, 0f)) ?? 0f;
+                    float multiplicativeFactor = multiplicativeFactors?.Select(f => f.GetValue(context, actor.Actor, 1f)).Aggregate(1f, (a, b) => a * b) ?? 1f;
                     float value = additiveFactor * multiplicativeFactor;
                     stat.ChangeValue(value);
                 }
