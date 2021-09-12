@@ -1,10 +1,10 @@
+using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.TurnBased.Controller.Actors;
 using CcgCore.Model.Cards;
 using CcgCore.Model.Config;
 using CcgCore.Model.Effects;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
-using Stats.Model;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

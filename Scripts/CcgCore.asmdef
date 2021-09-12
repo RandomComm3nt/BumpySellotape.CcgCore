@@ -3,9 +3,9 @@
     "rootNamespace": "BumpySellotape.CcgCore",
     "references": [
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:3aab6fac66d7eb74bb5cf5a1657b7950",
         "GUID:5cd64b5cb23ac5c48b6cc31f8a91055e",
-        "GUID:8a1a3829dd7bce248ab3d1c492c6c9be"
+        "GUID:8a1a3829dd7bce248ab3d1c492c6c9be",
+        "GUID:f49db5eb6f043404d94c5103540e8224"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,4 +1,4 @@
-﻿using BumpySellotape.Stats.Model;
+﻿using BumpySellotape.Core.Stats.Model;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;

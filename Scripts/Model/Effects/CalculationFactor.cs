@@ -1,4 +1,4 @@
-﻿using BumpySellotape.Stats.Model;
+﻿using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.TurnBased.Controller.Actors;
 using Sirenix.OdinInspector;
 using System.Linq;

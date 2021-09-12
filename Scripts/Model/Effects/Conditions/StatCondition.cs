@@ -1,5 +1,5 @@
 ﻿using BumpySellotape.Events.Model.Conditions;
-using BumpySellotape.Stats.Model;
+using BumpySellotape.Core.Stats.Model;
 using CcgCore.Controller.Actors;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
