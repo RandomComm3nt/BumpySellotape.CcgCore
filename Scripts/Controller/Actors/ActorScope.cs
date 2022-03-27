@@ -16,7 +16,7 @@ namespace CcgCore.Controller.Actors
         public ActorScope(ParameterScope parentScope) 
             : base(ParameterScopeLevel.Actor, parentScope)
         {
-            Actor.StatCollection.OnAnyStatChanged += () => RaiseEvent(new CardGameEvent(Events.EventType.StatChanged));
+            Actor.StatCollection.AnyStatChanged += (_) => RaiseEvent(new CardGameEvent(Events.EventType.StatChanged));
         }
 
         public void Initialise(Actor actor, ActorTemplate playerTemplate)
