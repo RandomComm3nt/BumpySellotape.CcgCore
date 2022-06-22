@@ -17,12 +17,12 @@ namespace CcgCore.Controller
         public delegate void OutputMessageSent(string message);
         public event OutputMessageSent OnOutputMessageSent;
 
-        public CardGameControllerBase(CardGameConfig config) 
+        public CardGameControllerBase(CardGameConfig config, CardFactory cardFactory) 
             : base(ParameterScopeLevel.Game, null)
         {
             eventOrchestrator = new EventOrchestratorBase();
             CardGameConfig = config;
-            CardFactory = new CardFactory();
+            CardFactory = cardFactory;
         }
 
         public override void RaiseEvent(CardGameEvent cardGameEvent)

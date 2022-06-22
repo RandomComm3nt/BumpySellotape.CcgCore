@@ -3,21 +3,18 @@ using CcgCore.Model.Parameters;
 
 namespace CcgCore.Controller.Cards
 {
-    public class CardFactory
+    public abstract class CardFactory
     {
         public Card CreateCard(CardDefinition cardDefinition, ParameterScope parent)
         {
-            return new Card(cardDefinition, parent);
+            var c = new Card(cardDefinition, parent);
+            InitialiseCardAfterCreation(c);
+            CreateCardDisplayForNewCard(c);
+            return c;
         }
 
-        protected virtual void InitialiseCardAfterCreation(Card card)
-        {
+        protected abstract void InitialiseCardAfterCreation(Card card);
 
-        }
-
-        protected virtual void CreateCardDisplayForNewCard(Card card)
-        {
-
-        }
+        protected abstract void CreateCardDisplayForNewCard(Card card);
     }
 }
