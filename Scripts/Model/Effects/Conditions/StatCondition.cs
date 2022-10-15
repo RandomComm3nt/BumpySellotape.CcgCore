@@ -5,6 +5,7 @@ using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
+using BumpySellotape.Core.Stats.Controller;
 
 namespace BumpySellotape.CcgCore.CcgCore.Model.Effects.Conditions
 {
@@ -18,7 +19,7 @@ namespace BumpySellotape.CcgCore.CcgCore.Model.Effects.Conditions
         {
             if (scope is ActorScope a)
             {
-                var statValue = a.Actor.StatCollection.GetStatValue(statType);
+                var statValue = a.Actor.SystemLinks.GetSystemSafe<StatCollection>().GetStatValue(statType);
                 return ComparisonUtility.CompareValue(statValue, comparisonOperator, value);
             }
             throw new NotImplementedException();

@@ -12,9 +12,9 @@ namespace CcgCore.Model.Effects.Conditions
     public class CardCondition : BumpySellotape.CcgCore.Model.Effects.Conditions.Condition<Card>
     {
         [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCard = false;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCard"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cardDefinitions = new List<CardDefinition>();
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCard"), ValueDropdown("@CcgCore.Controller.CardGameEditor.GetAllCards")] private List<CardDefinition> cardDefinitions = new();
         [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCardTags = false;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCardTags"), ValueDropdown("@CcgCore.Controller.CardGameEditor.CardGameConfig.CardTags")] private List<int> tags = new List<int>();
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ShowIf("checkCardTags"), ValueDropdown("@CcgCore.Controller.CardGameEditor.CardGameConfig.CardTags")] private List<int> tags = new();
 
         [SerializeField, FoldoutGroup("@DisplayLabel")] private bool checkCounters = false;
         [SerializeField, HorizontalGroup("@DisplayLabel/Counters"), ShowIf("checkCounters"), LabelText("Counters")]

@@ -45,7 +45,7 @@ namespace CcgCore.Controller.Events
 
         protected virtual CardEffectActivationContext CreateContextFromEvent(CardGameEvent cardGameEvent)
         {
-            return new CardEffectActivationContext()
+            return new CardEffectActivationContext(null)
             {
                 activatedCard = cardGameEvent.callingHeirachy[0] as Card,
                 triggerActor = (cardGameEvent.GetFromHeirachyAtLevel(ParameterScopeLevel.Actor) as ActorScope),

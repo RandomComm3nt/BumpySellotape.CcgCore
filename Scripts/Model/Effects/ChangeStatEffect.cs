@@ -1,41 +1,24 @@
-﻿using BumpySellotape.Core.Stats.Model;
-using CcgCore.Model.Parameters;
+﻿using BumpySellotape.Core.Stats.Controller;
+using BumpySellotape.Events.Model.Effects;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-namespace CcgCore.Model.Effects
+namespace BumpySellotape.CcgCore.Model.Effects
 {
-    public class ChangeStatEffect : TargetedCardEffect
+    public class ChangeStatEffectCcg : ChangeStatEffectBase
     {
-        [SerializeField, FoldoutGroup("@DisplayLabel")] private StatType statType;
+        [SerializeField, FoldoutGroup("@Label")] private Target target;
 
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> additiveFactors = new List<CalculationFactor>();
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> multiplicativeFactors = new List<CalculationFactor>();
-
-        public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
+        protected override List<StatCollection> GetTargetStatCollections(ProcessingContext context)
         {
-            var targets = GetTargetActors(context, thisScope);
-            foreach (var actor in targets)
+            return target switch
             {
-                if (actor.Actor.StatCollection.GetStat(statType, out var stat))
-                {
-                    float additiveFactor = additiveFactors?.Sum(f => f.GetValue(context, actor.Actor, 0f)) ?? 0f;
-                    float multiplicativeFactor = multiplicativeFactors?.Select(f => f.GetValue(context, actor.Actor, 1f)).Aggregate(1f, (a, b) => a * b) ?? 1f;
-                    float value = additiveFactor * multiplicativeFactor;
-                    stat.ChangeValue(value);
-                }
-            }
-        }
-
-        private CalculationFactor GetDefaultFactor => new CalculationFactor();
-
-        public override string DisplayLabel => $"Change {(statType ? statType.DisplayName : "[stat]")} by [value]";
-
-        public List<string> GetParameters()
-        {
-            return additiveFactors.Union(multiplicativeFactors).Where(f => f.IsParamaterised).Select(f => f.ParameterName).ToList();
+                Target.Player => new() { context.SystemLinks.GetSystemSafe<StatCollection>() },
+                Target.Self => new List<StatCollection>(),
+                Target.Target1 => new List<StatCollection>(),
+                _ => new List<StatCollection>(),
+            };
         }
     }
 }

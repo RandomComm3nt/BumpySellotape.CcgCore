@@ -1,10 +1,13 @@
-﻿using CcgCore.Controller.Events;
-using CcgCore.Model;
+﻿using BumpySellotape.CcgCore.Controller.Cards.States;
+using BumpySellotape.Core.Utilities;
+using BumpySellotape.Events.Model.Effects;
+using CcgCore.Controller.Events;
 using CcgCore.Model.Cards;
 using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace CcgCore.Controller.Cards
 {
@@ -15,6 +18,23 @@ namespace CcgCore.Controller.Cards
 
         public CardDefinition CardDefinition { get; private set; }
         public int Counters { get; private set; }
+
+        public delegate void StateChangedHandler();
+        public event StateChangedHandler StateChanged;
+        /// <summary>
+        /// Invoked when a value within the current state changes
+        /// </summary>
+        public event SimpleEventHandler StateValueChanged;
+        private CardState cardState;
+        public CardState CardState
+        {
+            get => cardState;
+            set
+            {
+                cardState = value;
+                StateChanged?.Invoke();
+            }
+        }
 
         internal Card(CardDefinition cardDefinition, ParameterScope parent)
             : base(ParameterScopeLevel.Card, parent)
@@ -31,9 +51,9 @@ namespace CcgCore.Controller.Cards
         {
             Counters += delta;
             if (delta > 0)
-                RaiseEvent(new CardGameEvent(EventType.CountersAddedToCard));
+                RaiseEvent(new CardGameEvent(Events.EventType.CountersAddedToCard));
             else if (delta < 0)
-                RaiseEvent(new CardGameEvent(EventType.CountersRemovedFromCard));
+                RaiseEvent(new CardGameEvent(Events.EventType.CountersRemovedFromCard));
             OnCardChanged?.Invoke();
         }
         
@@ -57,7 +77,7 @@ namespace CcgCore.Controller.Cards
             return description;
         }
 
-        public void AttemptPlayCard(CardStack targetStack)
+        public void AttemptPlayCard(CardStack targetStack, ProcessingContext context)
         {
             bool success = true;
             /*
@@ -70,15 +90,10 @@ namespace CcgCore.Controller.Cards
                     success = false;
                     break;
                 }
-            }
+            
             */
 
-            var context = new CardEffectActivationContext()
-            {
-                targetStack = targetStack,
-                cardGameController = RootScope as CardGameControllerBase,
-                activatedCard = this,
-            };
+            
 
             if (success)
             {
@@ -95,8 +110,13 @@ namespace CcgCore.Controller.Cards
             }
         }
 
-        public void PlayCard(CardEffectActivationContext context)
+        public void PlayCard(ProcessingContext context)
         {
+            if (CardDefinition.DebugCard)
+            {
+                Debug.Log("Playing card " + CardDefinition.name);
+                context.logDebugMessages = true;
+            }
             var cardEvent = new CardGameEvent(Events.EventType.CardActivationSuccess);
             RaiseEvent(cardEvent);
             if (cardEvent.IsCancelled)
@@ -105,10 +125,16 @@ namespace CcgCore.Controller.Cards
             CardDefinition.Modules.ForEach(m => m.ActivateCard(context, this));
         }
 
-        public void FailToPlayCard(CardEffectActivationContext context)
+        public void FailToPlayCard(ProcessingContext context)
         {
             var cardEvent = new CardGameEvent(Events.EventType.CardActivationFailure);
             RaiseEvent(cardEvent);
+        }
+
+        public void InvokeStateValueChanged(CardState cardState)
+        {
+            if (cardState == CardState)
+                StateValueChanged?.Invoke();
         }
     }
 }

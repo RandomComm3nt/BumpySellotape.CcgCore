@@ -1,4 +1,5 @@
-﻿using BumpySellotape.TurnBased.Controller.Actors;
+﻿using BumpySellotape.Events.Model.Effects;
+using BumpySellotape.TurnBased.Controller.Actors;
 using CcgCore.Controller.Cards;
 using CcgCore.Controller.Events;
 using CcgCore.Model.Config;
@@ -34,6 +35,12 @@ namespace CcgCore.Controller
         public void OutputMessage(string message)
         {
             OnOutputMessageSent?.Invoke(message);
+        }
+
+        public virtual ProcessingContext CreateContext()
+        {
+            var c = new ProcessingContext(null);
+            return c;
         }
     }
 }

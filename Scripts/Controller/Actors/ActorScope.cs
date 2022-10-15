@@ -1,4 +1,5 @@
-﻿using BumpySellotape.TurnBased.Controller;
+﻿using BumpySellotape.Core.Stats.Controller;
+using BumpySellotape.TurnBased.Controller;
 using BumpySellotape.TurnBased.Controller.Actors;
 using CcgCore.Controller.Cards;
 using CcgCore.Controller.Events;
@@ -16,7 +17,7 @@ namespace CcgCore.Controller.Actors
         public ActorScope(ParameterScope parentScope) 
             : base(ParameterScopeLevel.Actor, parentScope)
         {
-            Actor.StatCollection.AnyStatChanged += (_) => RaiseEvent(new CardGameEvent(Events.EventType.StatChanged));
+            Actor.SystemLinks.GetSystemSafe<StatCollection>().AnyStatChanged += (_) => RaiseEvent(new CardGameEvent(Events.EventType.StatChanged));
         }
 
         public void Initialise(Actor actor, ActorTemplate playerTemplate)
@@ -39,7 +40,7 @@ namespace CcgCore.Controller.Actors
                 return;
             }
 
-            card.AttemptPlayCard(null);
+            card.AttemptPlayCard(null, null);
             cardsPlayedThisTurn++;
             CheckIfShouldEndTurn();
         }

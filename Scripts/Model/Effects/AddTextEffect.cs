@@ -1,4 +1,5 @@
-﻿using CcgCore.Model;
+﻿using BumpySellotape.Events.Model.Effects;
+using CcgCore.Model;
 using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
@@ -14,6 +15,8 @@ namespace BumpySellotape.CcgCore.CcgCore.Model.Effects
         //[SerializeField, FoldoutGroup("Activation Text"), ListDrawerSettings(CustomAddFunction = "AddTextOption"), HideReferenceObjectPicker] private List<TextOption> context = new List<TextOption>();
         [SerializeField, FoldoutGroup("Activation Text"), ListDrawerSettings(CustomAddFunction = "AddActionTextOption"), HideReferenceObjectPicker] private List<ActionTextOption> action = new List<ActionTextOption>();
         [SerializeField, FoldoutGroup("Activation Text"), ListDrawerSettings(CustomAddFunction = "AddTextOption"), HideReferenceObjectPicker] private List<TextOption> flavour = new List<TextOption>();
+
+        public string Label => "Add Text";
 
         public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisScope)
         {
@@ -73,6 +76,11 @@ namespace BumpySellotape.CcgCore.CcgCore.Model.Effects
         private ActionTextOption AddActionTextOption()
         {
             return new ActionTextOption();
+        }
+
+        public void Process(ProcessingContext processingContext)
+        {
+            throw new NotImplementedException();
         }
 
         private class TextOption

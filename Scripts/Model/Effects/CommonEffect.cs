@@ -1,24 +1,31 @@
-﻿using CcgCore.Model;
+﻿using BumpySellotape.Core.Events.Model.Effects;
+using BumpySellotape.Events.Model.Effects;
+using CcgCore.Model;
 using CcgCore.Model.Effects;
 using CcgCore.Model.Parameters;
 using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BumpySellotape.CcgCore.Model.Effects
 {
-    public class CommonEffect : CardEffect
+    public partial class CommonEffect : CardEffect
     {
         [SerializeField, FoldoutGroup("@DisplayLabel"), OnValueChanged("EffectDefinitionChanged")] private CommonEffectDefinition effectDefinition;
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "DefaultFactor"), ShowIf("effectDefinition")] private List<ParameterisedCalculationFactor> parameters = new List<ParameterisedCalculationFactor>();
+        [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "DefaultFactor"), ShowIf(nameof(ShowParameters))] private List<ParameterisedCalculationFactor> parameters = new();
 
         public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisCard)
         {
-            effectDefinition.ActivateEffect(context, thisCard, parameters);
+            //effectDefinition.ActivateEffect(context, thisCard, parameters);
         }
 
-        public override string DisplayLabel => effectDefinition ? effectDefinition.name : base.DisplayLabel;
+        public override void Process(ProcessingContext processingContext)
+        {
+            effectDefinition.Process(processingContext, parameters);
+        }
+
+        public override string DisplayLabel => effectDefinition ? GetDescription() : base.DisplayLabel;
 
         private ParameterisedCalculationFactor DefaultFactor()
         {
@@ -44,10 +51,16 @@ namespace BumpySellotape.CcgCore.Model.Effects
             }
         }
 
-        public class ParameterisedCalculationFactor : CalculationFactor
+        public string GetDescription()
         {
-            [HideInInspector, NonSerialized] public List<string> parameters;
-            [ValueDropdown("parameters"), PropertyOrder(-1), HideLabel(), SuffixLabel(":"), HorizontalGroup("HGroup")] public string key;
+            var dict = parameters.ToDictionary(p => p.key, p => p.DisplayValue);
+            return effectDefinition.GetDescriptionWithSubstitutions(dict);
         }
+
+        #region UNITY_EDITOR
+
+        private bool ShowParameters => effectDefinition != null && effectDefinition.IsParametrised;
+
+        #endregion
     }
 }

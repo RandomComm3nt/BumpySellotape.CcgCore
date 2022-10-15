@@ -1,4 +1,5 @@
-﻿using BumpySellotape.CcgCore.Model.Effects;
+﻿using BumpySellotape.Events.Controller;
+using BumpySellotape.Events.Model.Effects;
 using CcgCore.Controller;
 using CcgCore.Controller.Actors;
 using CcgCore.Controller.Cards;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 
 namespace CcgCore.Model
 {
-    public class CardEffectActivationContext
+    public class CardEffectActivationContext : ProcessingContext
     {
         public bool wasActionCancelled;
 
@@ -21,6 +22,8 @@ namespace CcgCore.Model
 
         public ActorScope triggerActor;
 
-        public List<CommonEffect.ParameterisedCalculationFactor> parameters;
+        public CardEffectActivationContext(GameController gameController) : base(gameController)
+        {
+        }
     }
 }
