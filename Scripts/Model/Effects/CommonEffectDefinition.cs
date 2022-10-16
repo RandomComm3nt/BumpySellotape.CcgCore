@@ -17,6 +17,9 @@ namespace CcgCore.Model.Effects
     {
         [OdinSerialize, HideReferenceObjectPicker, OnValueChanged("AllowParameters")] private List<IEffect> cardEffects = new();
         [field: SerializeField] public string Description { get; private set; }
+        [field: SerializeField] public bool UseIcon { get; private set; }
+        [field: SerializeField, ShowIf(nameof(UseIcon))] public Sprite Icon { get; private set; }
+        [field: SerializeField, ShowIf(nameof(UseIcon))] public string IconValueParameterName { get; private set; }
 
         public void ActivateEffect(CardEffectActivationContext context, ParameterScope thisCard, List<ParameterisedCalculationFactor> parameters)
         {

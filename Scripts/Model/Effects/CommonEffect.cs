@@ -15,6 +15,8 @@ namespace BumpySellotape.CcgCore.Model.Effects
         [SerializeField, FoldoutGroup("@DisplayLabel"), OnValueChanged("EffectDefinitionChanged")] private CommonEffectDefinition effectDefinition;
         [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "DefaultFactor"), ShowIf(nameof(ShowParameters))] private List<ParameterisedCalculationFactor> parameters = new();
 
+        public CommonEffectDefinition EffectDefinition { get => effectDefinition; set => effectDefinition = value; }
+
         public override void ActivateEffects(CardEffectActivationContext context, ParameterScope thisCard)
         {
             //effectDefinition.ActivateEffect(context, thisCard, parameters);
