@@ -21,9 +21,14 @@ namespace BumpySellotape.CcgCore.Controller.Cards.States
             Card = card;
         }
 
+        public virtual void ExitState()
+        {
+        }
+
         public virtual void Interact()
         { }
 
         public virtual bool IsFaceUp => true;
+        public virtual bool IsInteractable => false;
     }
 }

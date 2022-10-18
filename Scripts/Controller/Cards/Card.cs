@@ -31,6 +31,7 @@ namespace CcgCore.Controller.Cards
             get => cardState;
             set
             {
+                cardState?.ExitState();
                 cardState = value;
                 StateChanged?.Invoke();
             }

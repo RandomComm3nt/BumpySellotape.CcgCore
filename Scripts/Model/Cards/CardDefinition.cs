@@ -9,6 +9,9 @@ namespace CcgCore.Model.Cards
     [CreateAssetMenu(menuName = "Card/Card Definition")]
     public class CardDefinition : SerializedScriptableObject
     {
+        [SerializeField] private string displayNameOverride;
+        [ShowInInspector] public string DisplayName => (displayNameOverride?.Length ?? 0) > 0 ? displayNameOverride : name;
+
         [field: SerializeField, ValueDropdown("@CcgCore.Controller.CardGameEditor.CardGameConfig.CardTags")]
         public List<int> Tags { get; private set; } = new ();
 
