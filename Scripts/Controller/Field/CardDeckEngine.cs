@@ -178,6 +178,18 @@ namespace DreamCcg.Controller.Field
             GetRegionList(fromRegion).Remove(card);
         }
 
+        public CardState GetDefaultState(Card card, Region region)
+        {
+            return region switch
+            {
+                Region.Deck => new DeckState(this, card),
+                Region.Hand => GetHandState(card),
+                Region.Discard => new DiscardState(this, card),
+                Region.Trash => throw new NotImplementedException(),
+                _ => throw new NotImplementedException(),
+            };
+        }
+
         public abstract CardState GetHandState(Card card);
     }
 }
