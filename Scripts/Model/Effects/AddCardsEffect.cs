@@ -20,7 +20,7 @@ namespace CcgCore.Model.Effects
             var targets = GetTargetActors(context, thisScope);
             foreach (var actor in targets)
             {
-                var scopes = actor.ActorScope.GetAllChildScopesAtLevel(Parameters.ParameterScopeLevel.Region).Select(s => s as FieldRegion).ToList();
+                var scopes = actor.ActorScope.GetAllChildScopesAtLevel(ParameterScopeLevel.Region).Select(s => s as FieldRegion).ToList();
                 var regions = regionSelectionType switch
                 {
                     RegionSelectionType.All => scopes,

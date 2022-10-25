@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace DreamCcg.Controller.Field
 {
-    public class CardDeckEngine
+    public abstract class CardDeckEngine
     {
         public enum Region
         {
@@ -165,14 +165,19 @@ namespace DreamCcg.Controller.Field
                 throw new Exception($"Card {card.CardDefinition} was not found in target region");
         }
 
-        public void AcquireCard(Region toRegion, Card card)
+        public void AcquireCard(Region toRegion, Card card, bool addToTop = false)
         {
-            GetRegionList(toRegion).Add(card);
+            if (addToTop)
+                GetRegionList(toRegion).Insert(0, card);
+            else
+                GetRegionList(toRegion).Add(card);
         }
 
         public void RemoveCard(Region fromRegion, Card card)
         {
             GetRegionList(fromRegion).Remove(card);
         }
+
+        public abstract CardState GetHandState(Card card);
     }
 }

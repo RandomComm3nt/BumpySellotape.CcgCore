@@ -7,9 +7,11 @@ namespace CcgCore.Controller.Actions
     {
         #region Data
 
-        private List<QueuedAction> queuedActions;
+        private List<Action> queuedActions;
 
         private bool inAction;
+        private bool isWaiting;
+        private List<object> busyProcesses;
 
         #endregion
 
@@ -17,39 +19,52 @@ namespace CcgCore.Controller.Actions
 
         public ActionQueue()
         {
-            queuedActions = new List<QueuedAction>();
+            queuedActions = new List<Action>();
             inAction = false;
         }
 
-        public void AdvanceToNextAction()
+        private void AdvanceToNextAction()
         {
+            isWaiting = false;
             if (queuedActions.Count == 0)
             {
                 inAction = false;
                 return;
             }
 
+            busyProcesses = new List<object>();
             inAction = true;
-            //Action a = queuedActions[0];
+            Action a = queuedActions[0];
             queuedActions.RemoveAt(0);
-            //a.Invoke();
+            a.Invoke();
+            // if UI has not told us it is doing something, advance immediately
+            if (busyProcesses.Count == 0)
+                AdvanceToNextAction();
+            else
+                isWaiting = true;
         }
 
         public void EnqueueAction(Action action)
         {
-            //queuedActions.Add(action);
+            queuedActions.Add(action);
             if (!inAction)
                 AdvanceToNextAction();
         }
 
-        public void EnqueueActionWithAdvance(Action action)
+        public void PauseProcessing(object process)
         {
-            Action combinedAction = () =>
-            {
-                action.Invoke();
+            if (!inAction)
+                return;
+            busyProcesses.Add(process);
+        }
+
+        public void ResumeProcessing(object process)
+        {
+            if (!inAction)
+                return;
+            busyProcesses.Remove(process);
+            if (busyProcesses.Count == 0)
                 AdvanceToNextAction();
-            };
-            EnqueueAction(combinedAction);
         }
 
         #endregion

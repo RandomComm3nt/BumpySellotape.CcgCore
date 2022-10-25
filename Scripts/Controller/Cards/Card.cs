@@ -113,6 +113,8 @@ namespace CcgCore.Controller.Cards
 
         public void PlayCard(ProcessingContext context)
         {
+            context.SystemLinks.RegisterSystem(this);
+
             if (CardDefinition.DebugCard)
             {
                 Debug.Log("Playing card " + CardDefinition.name);

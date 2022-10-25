@@ -4,6 +4,7 @@ using CcgCore.Controller.Cards;
 using CcgCore.Controller.Events;
 using CcgCore.Model.Config;
 using CcgCore.Model.Parameters;
+using System;
 
 namespace CcgCore.Controller
 {
@@ -41,6 +42,11 @@ namespace CcgCore.Controller
         {
             var c = new ProcessingContext(null);
             return c;
+        }
+
+        public virtual void EndGame()
+        {
+            throw new NotImplementedException();
         }
     }
 }
